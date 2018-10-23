@@ -160,7 +160,6 @@ export class AssetExample extends React.Component {
 						{Object.values(this.state.res).map(item => this.renderItem(item))}
 					</View>
 				</ScrollView>
-				<BottomMenu navigation={this.props.navigation}/>
 			</View>
 		);
 	}

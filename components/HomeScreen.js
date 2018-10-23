@@ -79,7 +79,7 @@ render() {
 			<Button title="Копка счетчик" onPress={this.btnPressed.bind(this)} />
 			<Text style={{ color: '#000', fontSize: 12 }}>{this.state.val}</Text>
 
-			<BottomMenu navigation={this.props.navigation}/>
+			
 
 		</View>
 	);

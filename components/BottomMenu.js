@@ -4,18 +4,20 @@ import {
 	TouchableNativeFeedback,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { withNavigation } from 'react-navigation';
 
-
-export default class BottomMenu extends React.Component {
+class BottomMenu extends React.Component {
 	constructor(props) {
+		//console.log('props from menu',props.navigation)
 		super(props);
 	}
 	render() {
-		const { navigate } = this.props.navigation;
+		//const { navigate } = this.props.navigation;
+		//console.log(this.props.navigation);
 		return (
 			<View style={{ backgroundColor: '#fafafa', width: '100%', justifyContent: 'space-evenly', alignItems: 'stretch', flexDirection: 'row', paddingHorizontal: 10 }}>
 				<View style={{ width: '25%' }}>
-					<TouchableNativeFeedback  onPress={() => navigate('Home')} >
+					<TouchableNativeFeedback  onPress={() => this.props.navigation('Home')} >
 						<View style={{ padding: 10, flexDirection: 'column', alignItems: 'center' }}>
 							<MaterialIcons name="home" size={30} color="#333" style={{}} />
 
@@ -24,7 +26,7 @@ export default class BottomMenu extends React.Component {
 				</View>
 
 				<View style={{ width: '25%' }}>
-					<TouchableNativeFeedback onPress={() => navigate('Asset')}>
+					<TouchableNativeFeedback onPress={() => this.props.navigation('Asset')}>
 						<View style={{ padding: 10, flexDirection: 'column', alignItems: 'center' }}>
 							<MaterialIcons name="settings" size={30} color="#333" style={{}} />
 						</View>
@@ -54,3 +56,4 @@ export default class BottomMenu extends React.Component {
 		)
 	}
 }
+export default BottomMenu;
