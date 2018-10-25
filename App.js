@@ -1,3 +1,6 @@
+//Try something intresting
+
+
 import * as React from 'react';
 import {
 	Text,
@@ -8,13 +11,12 @@ import {
 	Vibration,
 	TouchableOpacity,
 	Image,
-} from 'react-native';
+} from 'react-native'; 
 
 import { createStackNavigator, NavigationActions, withNavigation } from 'react-navigation';
 import { HomeScreen } from './components/HomeScreen';
 import { AssetExample } from './components/AssetExample';
 import BottomMenu from './components/BottomMenu';
-
 
 
 const Navigator_1 = createStackNavigator(
