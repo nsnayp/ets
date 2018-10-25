@@ -1,6 +1,15 @@
 //Try something intresting, the one more
 
 // https://expo.io/dashboard/notifications  - эта штука реально отправляет нотифы даже закрытые
+/*
+https://docs.expo.io/versions/v30.0.0/distribution/building-standalone-apps
+https://docs.expo.io/versions/latest/guides/push-notifications
+https://docs.expo.io/versions/latest/guides/using-fcm
+https://expo.io/dashboard/notifications
+
+*/
+
+
 import * as React from 'react';
 import {
 	Text,
@@ -71,7 +80,7 @@ class App extends React.Component {
 				<Navigator_1 ref = { el  => { this.navig = el;  }} />
 				<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Text>Origin: {this.state.notification.origin}</Text>
-        <Text>Data: {JSON.stringify(this.state.notification.data)}</Text>
+        <Text>Data: {JSON.stringify(this.state.notificationex)}</Text>
       </View>
 				<BottomMenu navigation={this.navigate}/>
 			</View>

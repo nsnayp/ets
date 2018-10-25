@@ -3,14 +3,9 @@ import {
 	Text,
 	View,
 	StyleSheet,
-	Button,
 	TextInput,
-	Vibration,
 	TouchableOpacity,
-	TouchableNativeFeedback,
-	Image,
 	ScrollView,
-	Modal,
 	AsyncStorage,
 } from 'react-native';
 import { Constants } from 'expo';
@@ -28,6 +23,7 @@ export class AssetExample extends React.Component {
 		super(props);
 		this.state = {
 			ip: null,
+			token:null,
 			modalVisible: false,
 			res: [
 				{
@@ -35,13 +31,19 @@ export class AssetExample extends React.Component {
 					value: 'ip',
 					funcPress: 'changeIp',
 				},
-				{ title: 'Таймер автозапуска', value: '3 мин' },
+				{ title: 'Таймер автозапуска', value: 'token' },
 			],
 		};
 		AsyncStorage.getItem('ip')
 			.then(value => {
 				this.setState({ ip: value });
 				console.log(value);
+			})
+			.done();
+			AsyncStorage.getItem('token')
+			.then(value => {
+				this.setState({ token: value });
+
 			})
 			.done();
 	}
@@ -156,6 +158,7 @@ export class AssetExample extends React.Component {
 			<View style={[styles.container]}>
 				{this.renderModal()}
 				<ScrollView>
+					<Text>KEY1 = {this.state.token}</Text>
 					<View style={{ alignSelf: 'flex-start', width: '100%', padding: 8 }}>
 						{Object.values(this.state.res).map(item => this.renderItem(item))}
 					</View>

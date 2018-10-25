@@ -25,7 +25,8 @@
       "supportsTablet": true
     },
     "android": {
-     "package": "com.ets.nsnayp"
+     "package": "com.ets.nsnayp",
+     "googleServicesFile": "./google-services.json"
    }
   }
 }

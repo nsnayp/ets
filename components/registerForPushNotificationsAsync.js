@@ -1,5 +1,8 @@
 
 import { Permissions, Notifications } from 'expo';
+import {AsyncStorage,
+} from 'react-native';
+
 const PUSH_ENDPOINT = 'http://etsgroup.ru';
 
 export default async function registerForPushNotificationsAsync() {
@@ -23,7 +26,8 @@ export default async function registerForPushNotificationsAsync() {
 	}
             
 	// Get the token that uniquely identifies this device
-	let token = await Notifications.getExpoPushTokenAsync();
+              let token = await Notifications.getExpoPushTokenAsync();
+              AsyncStorage.setItem('token', token);
             console.log(token )
 	// POST the token to your backend server from where you can retrieve it to send push notifications.
 	return fetch(PUSH_ENDPOINT, {
