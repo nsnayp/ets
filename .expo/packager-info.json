@@ -1,9 +1,9 @@
 {
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 7644,
+  "expoServerNgrokUrl": "https://vu-xfm.nsnayp.ets.exp.direct",
+  "packagerNgrokUrl": "https://packager.vu-xfm.nsnayp.ets.exp.direct",
+  "ngrokPid": 11384,
   "devToolsPort": 19002
 }

@@ -9,20 +9,10 @@ https://expo.io/dashboard/notifications
 From work test
 */
 
-
 import * as React from 'react';
-import {
-	Text,
-	View,
-	StyleSheet,
-	Button,
-	TextInput,
-	Vibration,
-	TouchableOpacity,
-	Image,
-} from 'react-native'; 
-import {Notifications  } from 'expo';
-import { createStackNavigator, NavigationActions, withNavigation } from 'react-navigation';
+import { Text, View, AsyncStorage } from 'react-native';
+import { Notifications } from 'expo';
+import { createStackNavigator, NavigationActions } from 'react-navigation';
 import { HomeScreen } from './components/HomeScreen';
 import { AssetExample } from './components/AssetExample';
 import BottomMenu from './components/BottomMenu';
@@ -48,43 +38,61 @@ const Navigator_1 = createStackNavigator(
 
 class App extends React.Component {
 
-
 	state = {
 		notification: {},
-	            };
-	          
-	            componentDidMount() {
+		logedIn:false,
+		userKey:null
+	};
+
+	componentDidMount() {
 		registerForPushNotificationsAsync();
-
 		this._notificationSubscription = Notifications.addListener(this._handleNotification);
-	            }
-	          
-	            _handleNotification = (notification) => {
-		this.setState({notification: notification});
-	            };
+	}
 
+	_handleNotification = (notification) => {
+		this.setState({ notification: notification });
+		/* Принудительный роут на страницу при клике на нотифи	*/
+		this.navigate('Asset');
+	};
 
 	constructor(props) {
 		super(props)
-		
+
+		AsyncStorage.getItem('userKey')
+		.then(value => {
+			console.log('userKey',value)
+			if(value!=null){
+				this.navigate('Asset');
+				this.setState({ userKey: value, logedIn:true });
+			}
+		})
+		.done();
+
 	}
 
+	/* Navig - ссылка ref из компонента навигатора в соседние компоненты */
 	navigate = (where) => {
-		this.navig.dispatch(	NavigationActions.navigate({routeName: where} ) )
-		//return this.navig;
-	 }
-
+		this.navig.dispatch(NavigationActions.navigate({ routeName: where }))
+	}
+	renderMenu = () => {
+		if(this.state.logedIn===true){
+			return(<BottomMenu navigation={this.navigate} />);
+		}else{
+			return null
+		}
+	}
 	render() {
 		return (
 			<View style={{ flex: 1 }}>
-				<Navigator_1 ref = { el  => { this.navig = el;  }} />
-				<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text>Origin: {this.state.notification.origin}</Text>
-        <Text>Data: {JSON.stringify(this.state.notificationex)}</Text>
-      </View>
-				<BottomMenu navigation={this.navigate}/>
+				<Navigator_1 ref={el => { this.navig = el; }} />
+				{/*<View style={{ flex: , justifyContent: 'center', alignItems: 'center' }}>
+					<Text>Origin: {this.state.notification.origin}</Text>
+					<Text>Data: {JSON.stringify(this.state.notificationex)}</Text>
+				</View>*/}
+				{this.renderMenu()}
+				
 			</View>
 		)
-	} 
+	}
 }
 export default App;

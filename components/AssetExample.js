@@ -4,12 +4,12 @@ import {
 	View,
 	StyleSheet,
 	TextInput,
+	TouchableNativeFeedback,
 	TouchableOpacity,
 	ScrollView,
 	AsyncStorage,
 } from 'react-native';
-import { Constants } from 'expo';
-import BottomMenu from './BottomMenu';
+
 export class AssetExample extends React.Component {
 	static navigationOptions = ({ navigation }) => {
 		return {
@@ -23,15 +23,16 @@ export class AssetExample extends React.Component {
 		super(props);
 		this.state = {
 			ip: null,
-			token:null,
+			token: null,
 			modalVisible: false,
 			res: [
 				{
+					key: 1,
 					title: 'IP подключения',
 					value: 'ip',
 					funcPress: 'changeIp',
 				},
-				{ title: 'Таймер автозапуска', value: 'token' },
+				{ key: 2, title: 'Таймер автозапуска', value: 'token' },
 			],
 		};
 		AsyncStorage.getItem('ip')
@@ -40,7 +41,7 @@ export class AssetExample extends React.Component {
 				console.log(value);
 			})
 			.done();
-			AsyncStorage.getItem('token')
+		AsyncStorage.getItem('token')
 			.then(value => {
 				this.setState({ token: value });
 
@@ -59,7 +60,7 @@ export class AssetExample extends React.Component {
 	renderItem = item => {
 		var funct = item.funcPress;
 		return (
-			<View
+			<View key={item.key}
 				style={{
 					backgroundColor: '#fff',
 					width: '100%',
@@ -67,21 +68,23 @@ export class AssetExample extends React.Component {
 					borderBottomColor: '#fafafa',
 					borderBottomWidth: 1,
 				}}>
-				<TouchableOpacity
+				<TouchableNativeFeedback
 					style={{ width: '100%', flexDirection: 'row' }}
 					onPress={this[funct]}>
-					<View style={{ width: '50%' }}>
-						<Text style={{ color: '#333', fontSize: 16 }}>
-							{item.title} {this.state.modalVisible}
-						</Text>
+					<View style={{width:'100%' , flexDirection: 'row'}}>
+						<View style={{ width: '50%' }}>
+							<Text style={{ color: '#333', fontSize: 16 }}>
+								{item.title} {this.state.modalVisible}
+							</Text>
+						</View>
+						<View style={{ width: '50%' }}>
+							<Text selectable={true}
+								style={{ color: '#44aacc', fontSize: 16, textAlign: 'right' }}>
+								{this.state[item.value]}
+							</Text>
+						</View>
 					</View>
-					<View style={{ width: '50%' }}>
-						<Text
-							style={{ color: '#44aacc', fontSize: 16, textAlign: 'right' }}>
-							{this.state[item.value]}
-						</Text>
-					</View>
-				</TouchableOpacity>
+				</TouchableNativeFeedback>
 			</View>
 		);
 	};
@@ -158,7 +161,6 @@ export class AssetExample extends React.Component {
 			<View style={[styles.container]}>
 				{this.renderModal()}
 				<ScrollView>
-					<Text>KEY1 = {this.state.token}</Text>
 					<View style={{ alignSelf: 'flex-start', width: '100%', padding: 8 }}>
 						{Object.values(this.state.res).map(item => this.renderItem(item))}
 					</View>
