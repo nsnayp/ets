@@ -2,3 +2,4 @@ node_modules/
 package.json
 app.json
 .gitignore
+.google-services.json
