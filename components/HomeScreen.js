@@ -9,10 +9,15 @@ import {
 	TouchableNativeFeedback,
 	Image,
 	TextInput,
-	AsyncStorage
+	AsyncStorage,
+	Dimensions
 } from 'react-native';
+
+import { Constants } from 'expo';
+
 import { MaterialIcons } from '@expo/vector-icons';
 
+const {height, width} = Dimensions.get('window'); 
 
 export class HomeScreen extends React.Component {
 	static navigationOptions = ({ navigation }) => {
@@ -33,6 +38,9 @@ export class HomeScreen extends React.Component {
 
 constructor(props) {
 	super(props);
+
+	console.log('width', width, height)
+
 	this.state = {
 		val: 0,
 		token:'',
