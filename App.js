@@ -12,35 +12,17 @@ From work test
 import * as React from 'react';
 import { Text, View, AsyncStorage } from 'react-native';
 import { Notifications } from 'expo';
-import { createStackNavigator, NavigationActions } from 'react-navigation';
-import { HomeScreen } from './components/HomeScreen';
-import { AssetExample } from './components/AssetExample';
-import BottomMenu from './components/BottomMenu';
 import registerForPushNotificationsAsync from './components/registerForPushNotificationsAsync';
+import AppAuth from './screens/AppAuth';
+import AppNoAuth from './screens/AppNoAuth';
+import createIconSetFromFontello from '@expo/vector-icons/createIconSetFromFontello';
 
-const Navigator_1 = createStackNavigator(
-	{
-		Home: {
-			screen: HomeScreen,
-		},
-		Asset: {
-			screen: AssetExample,
-			navigationOptions: {
-				title: 'Настройки',
-			},
-		},
-	}, {
-		mode: 'card ',
-		headerMode: 'float',
-		headerTransitionPreset: "fade-in-place",
-	}
-);
 
 class App extends React.Component {
 
 	state = {
 		notification: {},
-		logedIn:false,
+		logedIn:null,
 		userKey:null
 	};
 
@@ -51,46 +33,51 @@ class App extends React.Component {
 
 	_handleNotification = (notification) => {
 		this.setState({ notification: notification });
-		/* Принудительный роут на страницу при клике на нотифи	*/
-		this.navigate('Asset');
 	};
 
 	constructor(props) {
 		super(props)
 
+		this.logout = this.logout.bind(this)
+		this.login = this.login.bind(this)
 		AsyncStorage.getItem('userKey')
 		.then(value => {
-			console.log('userKey',value)
-			if(value!=null){
-				this.navigate('Asset');
-				this.setState({ userKey: value, logedIn:true });
-			}
+			this.setState({ userKey: value, logedIn:true });
 		})
 		.done();
 
+		
 	}
-
-	/* Navig - ссылка ref из компонента навигатора в соседние компоненты */
-	navigate = (where) => {
-		this.navig.dispatch(NavigationActions.navigate({ routeName: where }))
+	logout() {
+		console.log('logout')
+		this.setState({
+			logedIn: false
+		})
 	}
-	renderMenu = () => {
+	login() {
+		console.log('login')
+		this.setState({
+			logedIn: true
+		})
+	}
+	renderAppController = () => {
 		if(this.state.logedIn===true){
-			return(<BottomMenu navigation={this.navigate} />);
+			return(<AppAuth logout={this.logout} navig={this.navig}></AppAuth>);
+		}else if(this.state.logedIn===false){
+			return(<AppNoAuth login={this.login} ></AppNoAuth>);
 		}else{
-			return null
+			return null;
 		}
 	}
+	
 	render() {
 		return (
-			<View style={{ flex: 1 }}>
-				<Navigator_1 ref={el => { this.navig = el; }} />
+			<View style={{ flex: 1, padding:1, paddingTop:26 }}>
 				{/*<View style={{ flex: , justifyContent: 'center', alignItems: 'center' }}>
 					<Text>Origin: {this.state.notification.origin}</Text>
 					<Text>Data: {JSON.stringify(this.state.notificationex)}</Text>
 				</View>*/}
-				{this.renderMenu()}
-				
+				{this.renderAppController() } 
 			</View>
 		)
 	}

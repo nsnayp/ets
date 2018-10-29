@@ -4,16 +4,16 @@ import {
 	TouchableNativeFeedback,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { withNavigation } from 'react-navigation';
+
 
 class BottomMenu extends React.Component {
 	constructor(props) {
-		//console.log('props from menu',props.navigation)
 		super(props);
+		console.log(this.props);
 	}
 	render() {
 		//const { navigate } = this.props.navigation;
-		//console.log(this.props.navigation);
+		
 		return (
 			<View style={{ backgroundColor: '#fafafa', width: '100%', justifyContent: 'space-evenly', alignItems: 'stretch', flexDirection: 'row', paddingHorizontal: 10 }}>
 				<View style={{ width: '25%' }}>
