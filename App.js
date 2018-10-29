@@ -42,14 +42,18 @@ class App extends React.Component {
 		this.login = this.login.bind(this)
 		AsyncStorage.getItem('userKey')
 		.then(value => {
-			this.setState({ userKey: value, logedIn:true });
+			if(value!=null){
+				this.setState({ userKey: value, logedIn:true });
+			}else{
+				this.setState({ logedIn:false });
+			}
 		})
 		.done();
 
-		
 	}
 	logout() {
 		console.log('logout')
+		AsyncStorage.removeItem('userKey')
 		this.setState({
 			logedIn: false
 		})
