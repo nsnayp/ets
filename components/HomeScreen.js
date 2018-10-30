@@ -93,6 +93,141 @@ constructor(props) {
 							}
 						]
 					},
+					{
+						key: 2,
+						title:'9552132 ER',
+						qty:2,
+						storage:'49-1-1',
+						images:[
+							{	
+								key:1,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							},
+							{	key:2,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							}
+						]
+					},
+					{
+						key: 2,
+						title:'9552132 ER',
+						qty:2,
+						storage:'49-1-1',
+						images:[
+							{	
+								key:1,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							},
+							{	key:2,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							}
+						]
+					},
+					{
+						key: 2,
+						title:'9552132 ER',
+						qty:2,
+						storage:'49-1-1',
+						images:[
+							{	
+								key:1,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							},
+							{	key:2,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							}
+						]
+					},
+					{
+						key: 2,
+						title:'9552132 ER',
+						qty:2,
+						storage:'49-1-1',
+						images:[
+							{	
+								key:1,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							},
+							{	key:2,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							}
+						]
+					},
+					{
+						key: 2,
+						title:'9552132 ER',
+						qty:2,
+						storage:'49-1-1',
+						images:[
+							{	
+								key:1,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							},
+							{	key:2,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							}
+						]
+					},
+					{
+						key: 2,
+						title:'9552132 ER',
+						qty:2,
+						storage:'49-1-1',
+						images:[
+							{	
+								key:1,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							},
+							{	key:2,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							}
+						]
+					},
+					{
+						key: 2,
+						title:'9552132 ER',
+						qty:2,
+						storage:'49-1-1',
+						images:[
+							{	
+								key:1,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							},
+							{	key:2,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							}
+						]
+					},
+					{
+						key: 2,
+						title:'9552132 ER',
+						qty:2,
+						storage:'49-1-1',
+						images:[
+							{	
+								key:1,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							},
+							{	key:2,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							}
+						]
+					},
+					{
+						key: 2,
+						title:'9552132 ER',
+						qty:2,
+						storage:'49-1-1',
+						images:[
+							{	
+								key:1,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							},
+							{	key:2,
+								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+							}
+						]
+					},
 				]
 
 				
@@ -152,7 +287,7 @@ navigateToRelease=(release)=>{
 
 renderRealese= release =>{
 	return(
-		<View key={release.key}>
+		<View key={release.key} style={{borderBottomColor:'#eee', borderBottomWidth:1}}>
 			<TouchableNativeFeedback
 			onPress={ ()=>{ this.navigateToRelease(release)} }>
 				<View style={{padding:16}}>
