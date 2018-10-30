@@ -74,7 +74,7 @@ class App extends React.Component {
 	
 	render() {
 		return (
-			<View style={{ flex: 1, padding:1, paddingTop:26 }}>
+			<View style={{ flex: 1, padding:0, paddingTop:26 }}>
 				{/*<View style={{ flex: , justifyContent: 'center', alignItems: 'center' }}>
 					<Text>Origin: {this.state.notification.origin}</Text>
 					<Text>Data: {JSON.stringify(this.state.notificationex)}</Text>

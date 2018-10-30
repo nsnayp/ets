@@ -32,11 +32,17 @@ export default class AppAuth extends React.Component {
 
 	  
 	componentDidMount() {
-		this.navig.dispatch(NavigationActions.navigate( {routeName:'Home', params:  {  title:'hello',logoutHandler: this.logout} } ))
+		/*this.navig.dispatch(NavigationActions.navigate( {routeName:'Home', params:  {  title:'hello',logoutHandler: this.logout} } ))*/
 		
 	}
 	navigate = (screen) => {
-		this.navig.dispatch(NavigationActions.navigate( {routeName:screen } ))
+		var params = {}
+		if(screen=='Asset'){
+			params = {logoutHandler: this.logout}
+			
+		}
+		this.navig.dispatch(NavigationActions.navigate( {routeName:screen, params: params} ))
+		
 	}
 
 	render() {

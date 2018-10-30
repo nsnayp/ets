@@ -8,6 +8,7 @@ import {
 	TouchableOpacity,
 	ScrollView,
 	AsyncStorage,
+	Button
 } from 'react-native';
 
 export class AssetExample extends React.Component {
@@ -157,6 +158,7 @@ export class AssetExample extends React.Component {
 		}
 	};
 	render() {
+		var  logoutHandler =(this.props.navigation.state.params)? this.props.navigation.state.params.logoutHandler : ()=>{console.log('empty method')};
 		return (
 			<View style={[styles.container]}>
 				{this.renderModal()}
@@ -165,6 +167,11 @@ export class AssetExample extends React.Component {
 						{Object.values(this.state.res).map(item => this.renderItem(item))}
 					</View>
 				</ScrollView>
+				 <Button title='Выйти'
+			onPress={logoutHandler}
+			
+			>
+			</Button>
 			</View>
 		);
 	}
