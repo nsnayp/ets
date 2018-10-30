@@ -37,7 +37,6 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props)
-
 		this.logout = this.logout.bind(this)
 		this.login = this.login.bind(this)
 		AsyncStorage.getItem('userKey')
@@ -49,7 +48,6 @@ class App extends React.Component {
 			}
 		})
 		.done();
-
 	}
 	logout() {
 		console.log('logout')
