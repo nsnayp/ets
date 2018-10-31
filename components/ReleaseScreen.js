@@ -7,23 +7,52 @@ import {
 	Image,
 	Dimensions 
 } from 'react-native';
-
+import ImgFullscreen from '../components/ImgFullscreen';
 
 export class ReleaseScreen extends React.Component {
 
 
 constructor(props) {
 	super(props); 
+	this.state = {
+		gallery:{
+			show:false,
+			uri:null
+		}
+	}
 }
 
 navigateToImage=(image)=>{
 	this.props.navigation.navigate({routeName:'Image', params:  {  image:image } })
 }
+onRequestClose=()=>{
+	this.setState({
+		gallery:{
+			show:false,
+			uri:null
+		}
+	})
+}
 
+
+renderGallery=(image)=> {
+	if(this.state.gallery.show){
+		return (
+			<ImgFullscreen onRequestClose={this.onRequestClose}  show={this.state.gallery.show} uri={this.state.gallery.uri}></ImgFullscreen>
+		);
+	}else{return null;}
+}
 
 renderImage=(image, count)=>{
 	return(
-		<TouchableNativeFeedback onPress={ ()=>{ this.navigateToImage(image)}}>
+		
+		<TouchableNativeFeedback onPress={ ()=>{ this.setState({
+			gallery:{
+				show:true,
+				uri:image.src
+			}
+		})}}>
+		
 			<View  key={image.key} style={{position:'relative', borderRadius:3, marginLeft:3}}>
 				<Image source={{uri:image.src}} style={{width:60, height:60, borderRadius:3}} />
 				<View style={{ position:'absolute', width:'100%', top:0, height:'100%', backgroundColor:'#2632387a', zIndex:10, paddingHorizontal:8, paddingVertical:3,  justifyContent:'flex-end' , borderRadius:3}}>
@@ -62,7 +91,8 @@ render() {
 	return (
 		
 		<View style={{flex:1, backgroundColor:'#fff'}}>
-            <ScrollView>{Object.values(release.details).map(detail => this.renderRealese(detail))}</ScrollView>
+			{this.renderGallery()}
+            			<ScrollView>{Object.values(release.details).map(detail => this.renderRealese(detail))}</ScrollView>
 		</View>
 	);
 }

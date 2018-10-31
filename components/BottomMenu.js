@@ -12,13 +12,20 @@ class BottomMenu extends React.Component {
 		super(props);
 		console.log(this.props.currentRoute)
 	}
+
+	_onPress = (screen) =>{
+		requestAnimationFrame(() => {
+			this.props.navigation(screen); 
+		})  
+	}
+
 	render() {
 
 		return (
 			
 			<View style={{ backgroundColor: '#fff', width: '100%', justifyContent: 'space-evenly', alignItems: 'stretch', flexDirection: 'row', paddingHorizontal: 10, borderTopColor:'#eee', borderTopWidth:1, elevation: 10  }}>
 				<View style={{ width: '25%' }}>
-					<TouchableNativeFeedback  onPress={() => { this.props.navigation('Home'); }  } >
+					<TouchableNativeFeedback  onPress={()=>{this._onPress('Home')}} >
 						<View style={{ padding: 10, flexDirection: 'column', alignItems: 'center' }}>
 							<MaterialIcons name="home" size={30} color={ (this.props.currentRoute==0||this.props.currentRoute==2||this.props.currentRoute==4)?'#3F51B5':'#8a8a8a' }  />
 
@@ -26,7 +33,7 @@ class BottomMenu extends React.Component {
 					</TouchableNativeFeedback>
 				</View>
 				<View style={{ width: '25%' }}>
-					<TouchableNativeFeedback  onPress={() => this.props.navigation('Search')}>
+					<TouchableNativeFeedback onPress={() => this._onPress('Search')}>
 						<View style={{ padding: 10, flexDirection: 'column', alignItems: 'center' }}>
 							<MaterialIcons name="search" size={30} color={ (this.props.currentRoute==3)?'#3F51B5':'#8a8a8a' } />
 							{/* <Text style={{fontSize:12, color:'#999'}}>Домой</Text> */}
@@ -34,7 +41,7 @@ class BottomMenu extends React.Component {
 					</TouchableNativeFeedback>
 				</View>
 				<View style={{ width: '25%' }}>
-					<TouchableNativeFeedback onPress={() => this.props.navigation('Asset')}>
+					<TouchableNativeFeedback onPress={() => this._onPress('Asset')}>
 						<View style={{ padding: 10, flexDirection: 'column', alignItems: 'center' }}>
 							<MaterialIcons name="settings" size={30} color={ (this.props.currentRoute==1)?'#3F51B5':'#8a8a8a' } />
 						</View>

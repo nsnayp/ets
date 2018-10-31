@@ -1,9 +1,9 @@
 {
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 11152,
-  "expoServerNgrokUrl": "https://w8-rqc.nsnayp.ets.exp.direct",
-  "packagerNgrokUrl": "https://packager.w8-rqc.nsnayp.ets.exp.direct",
-  "ngrokPid": 8080,
+  "packagerPid": 9504,
+  "expoServerNgrokUrl": "https://w8-rqc.nsnayp.test6.exp.direct",
+  "packagerNgrokUrl": "https://packager.w8-rqc.nsnayp.test6.exp.direct",
+  "ngrokPid": 7284,
   "devToolsPort": 19002
 }

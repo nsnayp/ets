@@ -9,31 +9,22 @@ var screenHeight = Dimensions.get('window').height;
 export default class ImgFullscreen extends Component {
 constructor(props) {
     super(props);
-    this.state={
-        modalVisible:true
-    }
 }
 
-
-close=()=>{
-    console.log('close img')
-    this.setState({modalVisible:false})
-}
 
 render() {
     return (
-        <View>
-            <Text>HEllo</Text>
+
             <Modal
-                onRequestClose={this.close}
+            animationType ="fade"
+                onRequestClose={ ()=>{ this.props.onRequestClose()  } }
                 transparent={true}
-                visible={this.state.modalVisible}
+                visible={this.props.show}
             >
-            <View style={{ width:screenWidth, height:screenHeight, zIndex:10000, top:0, left:0, backgroundColor:'#333', position:'absolute', justifyContent:'center', flexDirection:'column'}}>
+            <View style={{ width:screenWidth, height:screenHeight, zIndex:10000, top:0, left:0, backgroundColor:'#000', position:'absolute', justifyContent:'center', flexDirection:'column'}}>
                     <ScaledImage width={screenWidth} uri={this.props.uri} />
             </View>
             </Modal>
-        </View>
         
     );
 
