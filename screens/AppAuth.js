@@ -33,7 +33,7 @@ const Navigator = createDrawerNavigator(
 
 export default class AppAuth extends React.Component {
 	state = {
-		someVar: 'awdaw'
+		currentRoute:0
 	}
 	constructor(props) {
 		super(props)
@@ -55,7 +55,13 @@ export default class AppAuth extends React.Component {
 		this.navig.dispatch(NavigationActions.navigate( {routeName:screen, params: params} ))
 	}
 
-
+	getNavigParams=()=>{
+		console.log(this.navig.state)
+		this.navig.dispatch(NavigationActions.navigate( {routeName:screen, params: params} ))
+	}
+	curState = (state) =>{
+		this.setState({currentRoute:state.index})
+	}
 	render() {
 		return (
 			<View style={{flex:1, flexDirection:'column', overflow:'visible'}}>
@@ -76,8 +82,13 @@ export default class AppAuth extends React.Component {
 
 
 				</View>
-				<Navigator ref={el => { this.navig = el; }} /> 
-				<BottomMenu  navigation={this.navigate}></BottomMenu>
+				<Navigator
+					onNavigationStateChange={(prevState, currentState) => {
+						this.curState(currentState)
+					}}
+				 	ref={el => { this.navig = el; }} 
+				 /> 
+				<BottomMenu currentRoute={this.state.currentRoute} navigation={this.navigate}></BottomMenu>
 			</View> 
 		)
 	}
