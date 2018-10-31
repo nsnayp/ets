@@ -271,11 +271,16 @@ navigateToRelease=(release)=>{
 	this.props.navigation.navigate({routeName:'Release', params:  {  release:release } })
 }
 
+_onPress = (release) =>{
+	requestAnimationFrame(() => {
+		this.navigateToRelease(release)
+	})  
+}
 renderRealese= release =>{
 	return(
 		<View key={release.key} style={{borderBottomColor:'#eee', borderBottomWidth:1}}>
 			<TouchableNativeFeedback
-			onPress={ ()=>{ this.navigateToRelease(release)} }>
+			onPress={()=>{this._onPress(release)}}>
 				<View style={{padding:16}}>
 					<Text>Реализация номер: {release.title}</Text>
 					<Text>Дата документа: {release.date}</Text>
