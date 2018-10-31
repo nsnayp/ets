@@ -2,30 +2,16 @@ import * as React from 'react';
 import {
 	Text,
 	View,
-	StyleSheet,
-	Button,
-	Vibration,
-	TouchableOpacity,
 	TouchableNativeFeedback,
-	Image,
-	TextInput,
-	AsyncStorage,
-	Dimensions
 } from 'react-native';
 
-import { Constants } from 'expo';
-
-import { MaterialIcons } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
-
-const {height, width} = Dimensions.get('window'); 
 
 export class HomeScreen extends React.Component {
 
 
 constructor(props) {
 	super(props); 
-	//console.log(props.navigation)
 	this.state = {
 		releases: [
 			{
@@ -86,7 +72,7 @@ constructor(props) {
 						images:[
 							{	
 								key:1,
-								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+								src:'http://etsgroup.ru/assets/product/1000/bosch/0451103033_1.jpg'
 							},
 							{	key:2,
 								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
@@ -101,7 +87,7 @@ constructor(props) {
 						images:[
 							{	
 								key:1,
-								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+								src:'http://etsgroup.ru/assets/product/1000/bosch/0451103033_6.jpg'
 							},
 							{	key:2,
 								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
@@ -116,7 +102,7 @@ constructor(props) {
 						images:[
 							{	
 								key:1,
-								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
+								src:'http://etsgroup.ru/assets/product/1000/bosch/0451103033_2.jpg'
 							},
 							{	key:2,
 								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
@@ -304,16 +290,10 @@ renderRealese= release =>{
 
 
 render() {
-	
-	
-	//console.log(this.props)
-	//const logoutHandler = this.props.navigation.state.key('logoutHandler' ,false);
 
 	return (
 		<View style={{flex:1, backgroundColor:'#fff'}}>
-
 			<ScrollView>{Object.values(this.state.releases).map(item => this.renderRealese(item))}</ScrollView>
-			
 		</View>
 	);
 }
