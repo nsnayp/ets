@@ -6,7 +6,8 @@ import {
 	ActivityIndicator,
 	PanResponder,
 	Animated,
-	Dimensions
+	Dimensions,
+	Easing 
 } from 'react-native';
 
 import { ScrollView } from 'react-native-gesture-handler';
@@ -248,24 +249,66 @@ constructor(props) {
 	};
 }
 translateY = new Animated.Value(0);
+offsetTop = 0;
+
+getDirectionAndColor = ({ moveX, moveY, dx, dy}) => {
+	const draggedDown = dy > 20;
+	const draggedUp = dy < -20;
+	const draggedLeft = dx < -20;
+	const draggedRight = dx > 20;
+
+	let dragDirection = '';
+  
+	if (draggedDown || draggedUp) {
+	  if (draggedDown) dragDirection += 'dragged down '
+	  if (draggedUp) dragDirection +=  'dragged up ';
+	}
+  
+	if (draggedLeft || draggedRight) {
+	  if (draggedLeft) dragDirection += 'dragged left '
+	  if (draggedRight) dragDirection +=  'dragged right ';
+	}
+  
+
+	if (dragDirection) return dragDirection;
+  }
+
 
 _panResponder = PanResponder.create({
-    onMoveShouldSetResponderCapture: () => true,
-    onMoveShouldSetPanResponderCapture: () => true,
-    onPanResponderMove: Animated.event([null, {dy: this.translateY   }]),
-    onPanResponderRelease: (e, {vx, moveY  }) => {
-      const screenWidth = Dimensions.get("window").height;
-      //if (Math.abs(vx) >= 0.5 || Math.abs(dx) >= 0.5 * screenWidth) {
+    /*onMoveShouldSetResponderCapture: () => true,
+	onMoveShouldSetPanResponderCapture: () => true,*/
+	onMoveShouldSetPanResponder:(evt, gestureState) => !!this.getDirectionAndColor(gestureState),
+	onPanResponderMove:(e, gest) => {
+
+		
+		if(gest.dy < 120&&gest.dy>0){
+			Animated.event([
+				null, 
+				{dy: this.translateY},
+			])(e, gest)
+		}else if(gest.dy<0){
+			let newGest = {dy:(this.offsetTop + gest.dy)}
+			Animated.event([
+				null, 
+				{dy: this.translateY},
+			])(e, newGest)
+		}
+	},
+
+
+    onPanResponderRelease: (e, gest) => {
+	  /*const screenWidth = Dimensions.get("window").height;
+	  this.offsetTop = dy
+      if (dy>0) {
         Animated.timing(this.translateY, {
-          toValue: 0  ,
-          duration: 200
-        }).start(this.props.onDismiss);
-      /*} else {
-        Animated.spring(this.translateY, {
-          toValue: 0,
-          bounciness: 10
-        }).start();
-	}*/
+          toValue: 40 ,
+		  duration: 350,
+
+		  easing:Easing.elastic(1.2)
+		}).start(this.props.onDismiss);
+		
+	  }*/
+	  console.log(gest)
     }
 });
 
@@ -312,13 +355,33 @@ render() {
 
 	return (
 		<View style={{flex:1, backgroundColor:'#fff'}}>
-		
-			<Animated.View style={{transform: [{translateY: this.translateY}] }} {...this._panResponder.panHandlers}>
+
+			{/* <Animated.View style={{transform: [{translateY: this.translateY}] }} {...this._panResponder.panHandlers}>
+				<View>
+					
+					{Object.values(this.state.releases).map(item => this.renderRealese(item))}
+				</View>
+			</Animated.View> */}
+			<Animated.ScrollView
+				/*scrollEventThrottle={16}
+				onScroll={Animated.event(
+				[
+					{
+					nativeEvent: { contentOffset: { y: this.state.scrollY } }
+					}
+				],
+				{
+					useNativeDriver: false  // <- Native Driver used for animated events
+				}
+				)}*/
+				{...this._panResponder.panHandlers}
+				
+			>
 				<View>
 					{/* Scrollview */}
 					{Object.values(this.state.releases).map(item => this.renderRealese(item))}
 				</View>
-			</Animated.View>
+			</Animated.ScrollView>
 		</View>
 	);
 }
