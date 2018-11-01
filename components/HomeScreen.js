@@ -3,6 +3,10 @@ import {
 	Text,
 	View,
 	TouchableNativeFeedback,
+	ActivityIndicator,
+	PanResponder,
+	Animated,
+	Dimensions
 } from 'react-native';
 
 import { ScrollView } from 'react-native-gesture-handler';
@@ -13,6 +17,7 @@ export class HomeScreen extends React.Component {
 constructor(props) {
 	super(props); 
 	this.state = {
+		pan: new Animated.ValueXY(),
 		releases: [
 			{
 				key: 1,
@@ -242,6 +247,28 @@ constructor(props) {
 		],
 	};
 }
+translateY = new Animated.Value(0);
+
+_panResponder = PanResponder.create({
+    onMoveShouldSetResponderCapture: () => true,
+    onMoveShouldSetPanResponderCapture: () => true,
+    onPanResponderMove: Animated.event([null, {dy: this.translateY   }]),
+    onPanResponderRelease: (e, {vx, moveY  }) => {
+      const screenWidth = Dimensions.get("window").height;
+      //if (Math.abs(vx) >= 0.5 || Math.abs(dx) >= 0.5 * screenWidth) {
+        Animated.timing(this.translateY, {
+          toValue: 0  ,
+          duration: 200
+        }).start(this.props.onDismiss);
+      /*} else {
+        Animated.spring(this.translateY, {
+          toValue: 0,
+          bounciness: 10
+        }).start();
+	}*/
+    }
+});
+
 
 navigateToRelease=(release)=>{
 	this.props.navigation.navigate({routeName:'Release', params:  {  release:release } })
@@ -254,7 +281,9 @@ _onPress = (release) =>{
 }
 renderRealese= release =>{
 	return(
+		
 		<View key={release.key} style={{borderBottomColor:'#eee', borderBottomWidth:1}}>
+			
 			<TouchableNativeFeedback
 			onPress={()=>{this._onPress(release)}}>
 				<View style={{width:'100%', flexDirection:'row', justifyContent:'space-between',padding:16}}>
@@ -270,7 +299,9 @@ renderRealese= release =>{
 				</View>
 				
 			</TouchableNativeFeedback>
+			
 		</View>
+		
 		
 	)
 }
@@ -281,7 +312,13 @@ render() {
 
 	return (
 		<View style={{flex:1, backgroundColor:'#fff'}}>
-			<ScrollView>{Object.values(this.state.releases).map(item => this.renderRealese(item))}</ScrollView>
+		
+			<Animated.View style={{transform: [{translateY: this.translateY}] }} {...this._panResponder.panHandlers}>
+				<View>
+					{/* Scrollview */}
+					{Object.values(this.state.releases).map(item => this.renderRealese(item))}
+				</View>
+			</Animated.View>
 		</View>
 	);
 }
