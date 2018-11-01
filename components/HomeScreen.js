@@ -69,15 +69,7 @@ constructor(props) {
 						title:'9552132 ER',
 						qty:2,
 						storage:'49-1-1',
-						images:[
-							{	
-								key:1,
-								src:'http://etsgroup.ru/assets/product/1000/bosch/0451103033_1.jpg'
-							},
-							{	key:2,
-								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
-							}
-						]
+						images:[]
 					},
 					{
 						key: 2,
@@ -129,30 +121,14 @@ constructor(props) {
 						title:'9552132 ER',
 						qty:2,
 						storage:'49-1-1',
-						images:[
-							{	
-								key:1,
-								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
-							},
-							{	key:2,
-								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
-							}
-						]
+						images:null
 					},
 					{
 						key: 2,
 						title:'9552132 ER',
 						qty:2,
 						storage:'49-1-1',
-						images:[
-							{	
-								key:1,
-								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
-							},
-							{	key:2,
-								src:'http://etsgroup.ru/assets/product/255/tas/T17692.jpg'
-							}
-						]
+						images:[]
 					},
 					{
 						key: 2,
@@ -281,11 +257,18 @@ renderRealese= release =>{
 		<View key={release.key} style={{borderBottomColor:'#eee', borderBottomWidth:1}}>
 			<TouchableNativeFeedback
 			onPress={()=>{this._onPress(release)}}>
-				<View style={{padding:16}}>
-					<Text>Реализация номер: {release.title}</Text>
-					<Text>Дата документа: {release.date}</Text>
-					<Text>Количество позиций: {release.details&& release.details.length}</Text>
+				<View style={{width:'100%', flexDirection:'row', justifyContent:'space-between',padding:16}}>
+					<View style={{}}>
+						<Text>Реализация номер: {release.title}</Text>
+						<Text>Дата документа: {release.date}</Text>
+						<Text>Количество позиций: {release.details&& release.details.length}</Text>
+						
+					</View>
+					<View style={{flexDirection:'column', justifyContent:'center'}}>
+						<View style={{width:7, height:7, borderRadius:7, backgroundColor:'#3F51B5'}}></View>
+					</View>
 				</View>
+				
 			</TouchableNativeFeedback>
 		</View>
 		

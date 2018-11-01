@@ -11,7 +11,6 @@ import ImgFullscreen from '../components/ImgFullscreen';
 
 export class ReleaseScreen extends React.Component {
 
-
 constructor(props) {
 	super(props); 
 	this.state = {
@@ -21,6 +20,7 @@ constructor(props) {
 		}
 	}
 }
+
 renderImage=(image, images)=>{
 	return(
 		<ImgFullscreen images={images}>
@@ -32,6 +32,14 @@ renderImage=(image, images)=>{
 				</View>
 		</ImgFullscreen>
 	)
+}
+
+renderImageSmall(images){
+	if(images&&images.length>0){
+		return this.renderImage(images[0], images)
+	}else{
+		return null
+	}
 }
 
 renderRealese=detail=>{
@@ -46,10 +54,7 @@ renderRealese=detail=>{
 					<Text>Ячейка: {detail.storage}</Text>
 				</View>
 				<View >
-					{/* { <ScrollView horizontal={true} style={{flexDirection:'row'}}>
-						{Object.values(detail.images).map(img => this.renderImage(img))}
-					</ScrollView> } */}
-					{  this.renderImage(detail.images[0], detail.images) }
+					{ this.renderImageSmall(detail.images) }
 				</View>
 			</View>
 
