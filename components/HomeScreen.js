@@ -24,7 +24,9 @@ export class HomeScreen extends React.Component {
 constructor(props) {
 	super(props); 
 	this.state = {
+		carMarginLeft:new Animated.Value(0),
 		scrollY: new Animated.Value(0),
+		fxlock:false,
 		pan: new Animated.ValueXY(),
 		offers: [
 			
@@ -32,6 +34,7 @@ constructor(props) {
 				oem:'95535642',
 				brand:'ER',
 				photos:[],
+				key:4,
 				offers:[
 					{
 						key:1,
@@ -47,7 +50,7 @@ constructor(props) {
 						name:'Вал первичный 27T'
 					},
 					{
-						key:1,
+						key:2,
 						priceId:305,
 						offerId:12314,
 						inCart:false,
@@ -64,9 +67,10 @@ constructor(props) {
 				oem:'T17692',
 				brand:'TAS',
 				photos:[],
+				key:5,
 				offers:[
 					{
-						key:1,
+						key:3,
 						priceId:305,
 						offerId:12314,
 						inCart:false,
@@ -390,7 +394,7 @@ renderSrok=srok=>{
 	if(srok==0){
 		return(
 			<View style={{flexDirection:'row',alignItems:'center'}}>
-				<View style={{backgroundColor:'green', width:16,borderRadius:2, height:16,borderColor:'green'}}></View>
+				<View style={{backgroundColor:'#4CAF50', width:16,borderRadius:2, height:16,borderColor:'#4CAF50'}}></View>
 				<Text style={{marginLeft:10, fontSize:16, color:'green'}}>наличие</Text>
 			</View>
 			
@@ -398,8 +402,8 @@ renderSrok=srok=>{
 	}else{
 		return(
 			<View style={{flexDirection:'row',alignItems:'center'}}>
-				<View style={{backgroundColor:'#fff', width:16, height:16, borderRadius:2, borderWidth:2,borderColor:'green'}}></View>
-				<Text style={{marginLeft:10, fontSize:16}}>{srok} дн</Text>
+				<View style={{backgroundColor:'#fff', width:16, height:16, borderRadius:2, borderWidth:2,borderColor:'#4CAF50'}}></View>
+				<Text style={{marginLeft:10, fontSize:16, color:'#424242'}}>{srok} дн</Text>
 			</View>
 		)
 	}
@@ -408,8 +412,17 @@ renderSrok=srok=>{
 renderCart=offer=>{
 	if(offer.inCart===false){
 		return(
-			<TouchableNativeFeedback>
-				<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#dbdbdb'}}>
+			<TouchableNativeFeedback
+			onPress={(e)=>{
+				Animated.timing(this.state.carMarginLeft, {
+					toValue: 1 ,
+					duration: 350,
+		  
+					easing:Easing.elastic()
+				  }).start();
+			}}
+			>
+				<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
 					<Feather name="shopping-cart" size={22} color="#999" style={{}} />
 				</View>
 			</TouchableNativeFeedback>
@@ -417,13 +430,22 @@ renderCart=offer=>{
 	}else{
 		return(
 			<View style={{position:'relative'}}>
-				<TouchableNativeFeedback>
-					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#dbdbdb'}}>
-						<Feather name="shopping-cart" size={22} color="#666" style={{}} />
+				<TouchableNativeFeedback
+					onPress={(e)=>{
+						Animated.timing(this.state.carMarginLeft, {
+							toValue: 1 ,
+							duration: 350,
+				  
+							easing:Easing.elastic()
+						  }).start();
+					}}
+				>
+					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
+						<Feather name="shopping-cart" size={22} color="#999" style={{}} />
 					</View>
 				</TouchableNativeFeedback>
 
-				<View style={{position:'absolute', width:18, height:18, borderRadius:18, elevation:2, backgroundColor:'green', padding:0, justifyContent:'center', left:-18, top:2}}>
+				<View style={{position:'absolute', width:19, height:19, borderRadius:18, elevation:2, backgroundColor:'#f44336', padding:0, justifyContent:'center', left:15, top:-7}}>
 					<Text style={{color:'#fff', fontSize:10, alignSelf:'center'}}>12</Text>
 				</View>
 
@@ -433,29 +455,52 @@ renderCart=offer=>{
 }
 
 renderOffer=offer=>{
+	let carMarginLeft = this.state.carMarginLeft.interpolate({
+		inputRange: [0, 1],
+		outputRange: [0, -410]
+	  });
 	return(
-		<View key={1} style={{ flexDirection:'row', justifyContent:'space-between', paddingHorizontal:16,  paddingVertical:12, borderTopColor:'#fafafa', borderTopWidth:1}}>
-			
-			<View style={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'25%'}}>
-				{this.renderSrok(offer.srok)}	
-			
+		<Animated.View key={offer.key} style={{width:'300%', flexDirection:'row', marginLeft:carMarginLeft}}>
+			<View  style={{width:'33.3333%', flexDirection:'row', justifyContent:'space-between', paddingHorizontal:16,  paddingVertical:12, borderTopColor:'#fafafa', borderTopWidth:1}}>
+				
+				<View style={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'25%'}}>
+					{this.renderSrok(offer.srok)}	
+				
+				</View>
+				<View  style={{width:'15%', alignItems:'flex-end'}}>
+					<Text style={{marginLeft:10, fontSize:16, color:'#424242'}}>{offer.qty} шт</Text>
+				</View>
+				<View  style={{width:'25%',alignItems:'flex-end'}}>
+					<Text style={{marginLeft:10, fontSize:16, color:'#424242'}}>{offer.price} ₽</Text>
+				</View>
+				{this.renderCart(offer)}
+				
 			</View>
-			<View key={offer.brand} style={{width:'15%', alignItems:'flex-end'}}>
-				<Text style={{marginLeft:10, fontSize:16}}>{offer.qty} шт</Text>
+			<View  style={{width:'33.3333%', flexDirection:'row', justifyContent:'space-between', paddingHorizontal:16,  paddingVertical:12, borderTopColor:'#fafafa', borderTopWidth:1}}>
+				<Text>Позиция будет добавлена в корзину</Text>
+				<TouchableNativeFeedback
+					onPress={(e)=>{
+						Animated.timing(this.state.carMarginLeft, {
+							toValue: 0 ,
+							duration: 350,
+				  
+							easing:Easing.elastic()
+						  }).start();
+					}}
+				>
+					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
+						<Feather name="check" size={22} color="blue" style={{}} />
+					</View>
+				</TouchableNativeFeedback>
 			</View>
-			<View key={offer.brand} style={{width:'25%',alignItems:'flex-end'}}>
-				<Text style={{marginLeft:10, fontSize:16}}>{offer.price} ₽</Text>
-			</View>
-			{this.renderCart(offer)}
-			
-		</View>
+		</Animated.View>
 	)
 }
 
 renderOfferGroup = offerGroup =>{
 	return(
-		<View style={{marginBottom:24,}}>
-			<View key={1} style={{ flexDirection:'row', justifyContent:'space-between',  paddingHorizontal:16, backgroundColor:'#fafafa', paddingVertical:8}}>
+		<View key={offerGroup.key} style={{marginBottom:24,}}>
+			<View style={{ flexDirection:'row', justifyContent:'space-between',  paddingHorizontal:16, backgroundColor:'#fafafa', paddingVertical:8}}>
 				<Text style={{fontWeight:'bold'}}>{offerGroup.brand} {offerGroup.oem}</Text>
 				{/* <View>
 					<Feather name="camera" size={16} color="#999" style={{}} />
@@ -468,7 +513,7 @@ renderOfferGroup = offerGroup =>{
 		</View>
 	)
 }
-renderRealese= release =>{
+renderRealese= release =>{/*
 	return(
 		
 		<View key={release.key} style={[ {borderBottomColor:'#eee', borderBottomWidth:1}]}>
@@ -492,7 +537,7 @@ renderRealese= release =>{
 		</View>
 		
 		
-	)
+	)*/
 }
 
 
@@ -524,25 +569,33 @@ render() {
 		<View style={{flex:1, backgroundColor:'#fff', paddingTop:24}}>
 
 				<View>
-					<ScrollView 
+					<Animated.ScrollView 
 					showsVerticalScrollIndicator={false}
 					scrollEventThrottle={16}
-					onScroll={Animated.event(
-						[{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
-					)}
+					
+
+					onScroll={(e)=>{
+							//e.nativeEvent.contentOffset.y -=10 
+
+							Animated.event(
+								[{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
+							)(e)
+
+	
+					}}
 					>
 						<View style={styles.scrollViewContent}>
 						{Object.values(this.state.offers).map(item => this.renderOfferGroup(item))}
 						{/*Object.values(this.state.releases).map(item => this.renderRealese(item))*/}
 						</View>
-					</ScrollView>
+					</Animated.ScrollView>
 
 
 					<Animated.View style={[styles.header, {height: headerHeight,elevation:5}]}>
 						<View style={{position:'relative', height:'100%'}}>
 							<Animated.Image source={{uri:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}} style={{ height:250, marginTop:headerHeight1}} ></Animated.Image>
 							<Image source={{uri:'http://www.bigbangthinking.com/wp-content/uploads/revslider/home-dark/gradient.png'}} style={{width:'100%', height:250, position:'absolute', top:0}}></Image>
-							<Animated.View style={{ position:'absolute', width:'100%', top:0, height:'100%', backgroundColor:'#252829b3', zIndex:10, paddingVertical:headerHeight2, paddingHorizontal:16}}>
+							<Animated.View style={{ position:'absolute', width:'100%', top:0, height:'100%', backgroundColor:'#2196f369', zIndex:10, paddingVertical:headerHeight2, paddingHorizontal:16}}>
 							
 								<Animated.Text style={{color:'#fff', fontWeight:'bold' , fontSize:18}}>ZF 1315202037</Animated.Text>
 								<Animated.Text style={{color:'#fff',  fontSize:16, marginTop:20}}>{`Вал первичный\nс натяжителем чего-то там`}</Animated.Text>
