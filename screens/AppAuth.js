@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View , TouchableNativeFeedback, Dimensions} from 'react-native';
+import { Text, View , TouchableNativeFeedback, Dimensions, TextInput} from 'react-native';
 import BottomMenu from '../components/BottomMenu';
 import {HomeScreen} from '../components/HomeScreen';
 import {AssetExample} from '../components/AssetExample';
@@ -69,6 +69,16 @@ export default class AppAuth extends React.Component {
 				<View style={{width:'100%', height:80, backgroundColor:'#3F51B5', paddingTop:26, elevation:5}}>
 					<View style={{paddingVertical:12, paddingHorizontal:16, flexDirection:'row', justifyContent:'space-between'}}>
 						<Text style={{color:'#fff', fontSize:18}}>ETS.Склад</Text>
+						<View>
+							<TextInput style={{width:'100%'}}></TextInput>
+						</View>
+						<View>
+							<TouchableNativeFeedback onPress={() => this.navigate('Asset')}>
+								<View style={{ padding: 0, flexDirection: 'column', alignItems: 'center' }}>
+									<MaterialIcons name="shop" size={28} color="#fff" style={{}} />
+								</View>
+							</TouchableNativeFeedback>
+						</View>
 						<View>
 							<TouchableNativeFeedback onPress={() => this.navigate('Asset')}>
 								<View style={{ padding: 0, flexDirection: 'column', alignItems: 'center' }}>

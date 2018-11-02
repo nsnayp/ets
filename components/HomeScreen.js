@@ -7,18 +7,47 @@ import {
 	PanResponder,
 	Animated,
 	Dimensions,
-	Easing 
+	Easing,
+	ScrollView,
+	StyleSheet,
+	Image
+	
 } from 'react-native';
 
-import { ScrollView } from 'react-native-gesture-handler';
-
+//import { ScrollView } from 'react-native-gesture-handler';
+const HEADER_MAX_HEIGHT = 250;
+const HEADER_MIN_HEIGHT = 60;
+const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 export class HomeScreen extends React.Component {
-
 
 constructor(props) {
 	super(props); 
 	this.state = {
+		scrollY: new Animated.Value(0),
 		pan: new Animated.ValueXY(),
+		releases1: [
+			{
+				key:1,
+				oem:'1315202037',
+				brand:'ZF',
+				price:'13 500',
+				name:'Вал первичный 27T'
+			},
+			{
+				key:1,
+				oem:'1315202037',
+				brand:'ZF',
+				price:'13 500',
+				name:'Вал первичный 27T'
+			},
+			{
+				key:1,
+				oem:'1315202037',
+				brand:'ZF',
+				price:'13 500',
+				name:'Вал первичный 27T'
+			},
+		],
 		releases: [
 			{
 				key: 1,
@@ -251,7 +280,7 @@ constructor(props) {
 translateY = new Animated.Value(0);
 offsetTop = 0;
 
-getDirectionAndColor = ({ moveX, moveY, dx, dy}) => {
+getDirection = ({ moveX, moveY, dx, dy}) => {
 	const draggedDown = dy > 20;
 	const draggedUp = dy < -20;
 	const draggedLeft = dx < -20;
@@ -268,16 +297,14 @@ getDirectionAndColor = ({ moveX, moveY, dx, dy}) => {
 	  if (draggedLeft) dragDirection += 'dragged left '
 	  if (draggedRight) dragDirection +=  'dragged right ';
 	}
-  
-
-	if (dragDirection) return dragDirection;
-  }
+  	if (dragDirection) return dragDirection;
+}
 
 
 _panResponder = PanResponder.create({
     /*onMoveShouldSetResponderCapture: () => true,
 	onMoveShouldSetPanResponderCapture: () => true,*/
-	onMoveShouldSetPanResponder:(evt, gestureState) => !!this.getDirectionAndColor(gestureState),
+	onMoveShouldSetPanResponder:(evt, gestureState) => !!this.getDirection(gestureState),
 	onPanResponderMove:(e, gest) => {
 
 		
@@ -322,10 +349,17 @@ _onPress = (release) =>{
 		this.navigateToRelease(release)
 	})  
 }
+renderRealese1= release =>{
+	return(
+		<View key={release.key} style={[ {borderBottomColor:'#eee', borderBottomWidth:1}]}>
+			<Text>{JSON.stringify(release)}</Text>
+		</View>
+	)
+}
 renderRealese= release =>{
 	return(
 		
-		<View key={release.key} style={{borderBottomColor:'#eee', borderBottomWidth:1}}>
+		<View key={release.key} style={[ {borderBottomColor:'#eee', borderBottomWidth:1}]}>
 			
 			<TouchableNativeFeedback
 			onPress={()=>{this._onPress(release)}}>
@@ -352,37 +386,73 @@ renderRealese= release =>{
 
 
 render() {
+	
+	const headerHeight = this.state.scrollY.interpolate({
+		inputRange: [0, HEADER_SCROLL_DISTANCE],
+		outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+		extrapolate: 'clamp',
+	});
+
+	const headerHeight1 = this.state.scrollY.interpolate({
+		inputRange: [0, HEADER_SCROLL_DISTANCE],
+		outputRange: [0, -70],
+		extrapolate: 'clamp',
+	});
+
+	const headerHeight2 = this.state.scrollY.interpolate({
+		inputRange: [0, HEADER_SCROLL_DISTANCE],
+		outputRange: [22, 16],
+		extrapolate: 'clamp',
+	});
 
 	return (
+
+		
+
 		<View style={{flex:1, backgroundColor:'#fff'}}>
 
-			{/* <Animated.View style={{transform: [{translateY: this.translateY}] }} {...this._panResponder.panHandlers}>
 				<View>
-					
-					{Object.values(this.state.releases).map(item => this.renderRealese(item))}
+					<ScrollView 
+					showsVerticalScrollIndicator={false}
+					scrollEventThrottle={16}
+					onScroll={Animated.event(
+						[{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
+					)}
+					>
+						<View style={styles.scrollViewContent}>
+						{Object.values(this.state.releases1).map(item => this.renderRealese1(item))}
+						{Object.values(this.state.releases).map(item => this.renderRealese(item))}
+						</View>
+					</ScrollView>
+					<Animated.View style={[styles.header, {height: headerHeight}]}>
+						<View style={{position:'relative', height:'100%'}}>
+							<Animated.Image source={{uri:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}} style={{ height:250, marginTop:headerHeight1}} ></Animated.Image>
+							<Image source={{uri:'http://www.bigbangthinking.com/wp-content/uploads/revslider/home-dark/gradient.png'}} style={{width:'100%', height:250, position:'absolute', top:0}}></Image>
+							<Animated.View style={{ position:'absolute', width:'100%', top:0, height:'100%', backgroundColor:'#252829b3', zIndex:10, padding:headerHeight2}}>
+								<Animated.Text style={{color:'#fff', fontWeight:'bold' , fontSize:18}}>ZF 1315202037</Animated.Text>
+								<Animated.Text style={{color:'#fff',  fontSize:16, marginTop:20}}>{`Вал первичный\nс натяжителем чего-то там`}</Animated.Text>
+							</Animated.View>
+						</View>
+  					</Animated.View>
+
 				</View>
-			</Animated.View> */}
-			<Animated.ScrollView
-				/*scrollEventThrottle={16}
-				onScroll={Animated.event(
-				[
-					{
-					nativeEvent: { contentOffset: { y: this.state.scrollY } }
-					}
-				],
-				{
-					useNativeDriver: false  // <- Native Driver used for animated events
-				}
-				)}*/
-				{...this._panResponder.panHandlers}
-				
-			>
-				<View>
-					{/* Scrollview */}
-					{Object.values(this.state.releases).map(item => this.renderRealese(item))}
-				</View>
-			</Animated.ScrollView>
-		</View>
+			
+		</View>  
 	);
 }
 }
+
+
+const styles = StyleSheet.create({
+	scrollViewContent: {
+		marginTop: HEADER_MAX_HEIGHT,
+	},
+	header: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		backgroundColor: '#03A9F4',
+		overflow: 'hidden',
+	  }
+  });
