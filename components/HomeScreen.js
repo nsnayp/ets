@@ -14,11 +14,158 @@ import {
 	
 } from 'react-native';
 
-import { Feather } from '@expo/vector-icons';
+import { Feather,MaterialIcons } from '@expo/vector-icons';
 //import { ScrollView } from 'react-native-gesture-handler';
 const HEADER_MAX_HEIGHT = 250;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
+
+export class OfferLine extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = { ...this.props.offer}
+		this.state.carMarginLeft=new Animated.Value(0)
+	}
+
+	
+renderSrok=srok=>{
+	if(srok==0){
+		return(
+			<View style={{flexDirection:'row',alignItems:'center'}}>
+				<View style={{backgroundColor:'#4CAF50', width:16,borderRadius:2, height:16,borderColor:'#4CAF50'}}></View>
+				<Text style={{marginLeft:10, fontSize:14, color:'green'}}>В наличии</Text>
+			</View>
+			
+		)
+	}else{
+		return(
+			<View style={{flexDirection:'row',alignItems:'center'}}>
+				<View style={{backgroundColor:'#fff', width:16, height:16, borderRadius:2, borderWidth:2,borderColor:'#4CAF50'}}></View>
+				<Text style={{marginLeft:10, fontSize:14, color:'#424242'}}>{srok} дн</Text>
+			</View>
+		)
+	}
+}
+
+renderCart=offer=>{
+	if(offer.inCart===false){
+		return(
+			<TouchableNativeFeedback
+			onPress={(e)=>{
+				requestAnimationFrame(() => {
+				Animated.timing(this.state.carMarginLeft, {
+					toValue: 1 ,
+					duration: 250,
+		  
+					easing:Easing.elastic()
+				  }).start();
+				  
+				})
+			}}
+			>
+				<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
+					<Feather name="shopping-cart" size={22} color="#999" style={{}} />
+				</View>
+			</TouchableNativeFeedback>
+		)
+	}else{
+		return(
+			<View style={{position:'relative'}}>
+				<TouchableNativeFeedback
+					onPress={(e)=>{
+						requestAnimationFrame(() => {
+						/*Animated.timing(this.state.carMarginLeft, {
+							toValue: 1 ,
+							duration: 250,
+				  
+							easing:Easing.elastic()
+						  }).start();*/
+						  this.setState({cartQty:0, inCart:false})
+						})
+					}}
+				>
+					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
+						<Feather name="shopping-cart" size={22} color="#999" style={{}} />
+					</View>
+				</TouchableNativeFeedback>
+
+				<View style={{position:'absolute', width:19, height:19, borderRadius:18, elevation:2, backgroundColor:'#f44336', padding:0, justifyContent:'center', left:15, top:-7}}>
+					<Text style={{color:'#fff', fontSize:10, alignSelf:'center'}}>{this.state.cartQty}</Text>
+				</View>
+
+			</View>
+		)
+	}
+}
+
+render=()=>{
+	let carMarginLeft = this.state.carMarginLeft.interpolate({
+		inputRange: [0, 1],
+		outputRange: [0, -410]
+	  });
+	  const offer = this.state;
+	return(
+		<Animated.View key={offer.key} style={{width:'300%', flexDirection:'row', marginLeft:carMarginLeft}}>
+			<View  style={{width:'33.3333%', flexDirection:'row', justifyContent:'space-between', paddingHorizontal:16,  paddingVertical:12, borderTopColor:'#fafafa', borderTopWidth:1}}>
+				
+				<View style={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'25%'}}>
+					{this.renderSrok(offer.srok)}	
+				
+				</View>
+				<View  style={{width:'15%', alignItems:'flex-end'}}>
+					<Text style={{marginLeft:10, fontSize:14, color:'#424242'}}>{offer.qty} шт</Text>
+				</View>
+				<View  style={{width:'25%',alignItems:'flex-end'}}>
+					<Text style={{marginLeft:10, fontSize:14, color:'#424242'}}>{offer.price} ₽</Text>
+				</View>
+				<View  style={{alignItems:'flex-end'}}>
+				<Feather name="info" size={22} color="#999" style={{}} />
+				</View>
+				{this.renderCart(offer)}
+				
+			</View>
+			<View  style={{width:'33.3333%', flexDirection:'row', justifyContent:'space-between', paddingHorizontal:16,  paddingVertical:12, borderTopColor:'#fafafa', borderTopWidth:1}}>
+				<Text>Позиция будет добавлена в корзину</Text>
+
+				<TouchableNativeFeedback
+					onPress={(e)=>{
+						Animated.timing(this.state.carMarginLeft, {
+							toValue: 0 ,
+							duration: 250,
+				  
+							easing:Easing.elastic()
+						  }).start();
+						  
+					}}
+				>
+					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
+						<MaterialIcons name="close" size={22} color="#f44336" style={{}} />
+					</View>
+				</TouchableNativeFeedback>
+				<TouchableNativeFeedback
+					onPress={(e)=>{
+						Animated.timing(this.state.carMarginLeft, {
+							toValue: 0 ,
+							duration: 250,
+				  
+							easing:Easing.elastic()
+						  }).start();
+						  this.setState({cartQty:1, inCart:true})
+					}}
+				>
+					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
+						<Feather name="check" size={22} color="#4CAF50" style={{}} />
+					</View>
+				</TouchableNativeFeedback>
+
+				
+
+			</View>
+		</Animated.View>
+	)
+}
+}
+
 export class HomeScreen extends React.Component {
 
 constructor(props) {
@@ -40,7 +187,7 @@ constructor(props) {
 						key:1,
 						priceId:305,
 						offerId:12314,
-						inCart:true,
+						inCart:false,
 						hitId:134234,
 						srok:0,
 						qty:22,
@@ -75,6 +222,54 @@ constructor(props) {
 						offerId:12314,
 						inCart:false,
 						hitId:134234,
+						srok:0,
+						qty:12,
+						oem:'T17692',
+						brand:'TAS',
+						price:'14 853',
+						name:'Вал первичный 27T'
+					},
+					{
+						key:3,
+						priceId:305,
+						offerId:12314,
+						inCart:false,
+						hitId:134234,
+						srok:2,
+						qty:12,
+						oem:'T17692',
+						brand:'TAS',
+						price:'14 651',
+						name:'Вал первичный 27T'
+					},
+					{
+						key:3,
+						priceId:305,
+						offerId:12314,
+						inCart:false,
+						hitId:134234,
+						srok:2,
+						qty:12,
+						oem:'T17692',
+						brand:'TAS',
+						price:'14 800',
+						name:'Вал первичный 27T'
+					},
+					
+				]
+			}
+			,{
+				oem:'1315202037',
+				brand:'ZF',
+				photos:[],
+				key:5,
+				offers:[
+					{
+						key:3,
+						priceId:305,
+						offerId:12314,
+						inCart:false,
+						hitId:134234,
 						srok:1,
 						qty:12,
 						oem:'T17692',
@@ -82,9 +277,82 @@ constructor(props) {
 						price:'13 353',
 						name:'Вал первичный 27T'
 					},
+					{
+						key:3,
+						priceId:305,
+						offerId:12314,
+						inCart:false,
+						hitId:134234,
+						srok:2,
+						qty:12,
+						oem:'T17692',
+						brand:'TAS',
+						price:'14 651',
+						name:'Вал первичный 27T'
+					},
+					{
+						key:3,
+						priceId:305,
+						offerId:12314,
+						inCart:false,
+						hitId:134234,
+						srok:2,
+						qty:12,
+						oem:'T17692',
+						brand:'TAS',
+						price:'14 800',
+						name:'Вал первичный 27T'
+					},
 					
 				]
-			}
+			},{
+				oem:'T17692',
+				brand:'TAS',
+				photos:[],
+				key:5,
+				offers:[
+					{
+						key:3,
+						priceId:305,
+						offerId:12314,
+						inCart:false,
+						hitId:134234,
+						srok:1,
+						qty:12,
+						oem:'T17692',
+						brand:'TAS',
+						price:'14 853',
+						name:'Вал первичный 27T'
+					},
+					{
+						key:3,
+						priceId:305,
+						offerId:12314,
+						inCart:false,
+						hitId:134234,
+						srok:12,
+						qty:12,
+						oem:'T17692',
+						brand:'TAS',
+						price:'14 651',
+						name:'Вал первичный 27T'
+					},
+					{
+						key:3,
+						priceId:305,
+						offerId:12314,
+						inCart:false,
+						hitId:134234,
+						srok:12,
+						qty:12,
+						oem:'T17692',
+						brand:'TAS',
+						price:'14 800',
+						name:'Вал первичный 27T'
+					},
+					
+				]
+			},
 					
 			
 		],
@@ -390,110 +658,9 @@ _onPress = (release) =>{
 	})  
 }
 
-renderSrok=srok=>{
-	if(srok==0){
-		return(
-			<View style={{flexDirection:'row',alignItems:'center'}}>
-				<View style={{backgroundColor:'#4CAF50', width:16,borderRadius:2, height:16,borderColor:'#4CAF50'}}></View>
-				<Text style={{marginLeft:10, fontSize:16, color:'green'}}>наличие</Text>
-			</View>
-			
-		)
-	}else{
-		return(
-			<View style={{flexDirection:'row',alignItems:'center'}}>
-				<View style={{backgroundColor:'#fff', width:16, height:16, borderRadius:2, borderWidth:2,borderColor:'#4CAF50'}}></View>
-				<Text style={{marginLeft:10, fontSize:16, color:'#424242'}}>{srok} дн</Text>
-			</View>
-		)
-	}
-}
-
-renderCart=offer=>{
-	if(offer.inCart===false){
-		return(
-			<TouchableNativeFeedback
-			onPress={(e)=>{
-				Animated.timing(this.state.carMarginLeft, {
-					toValue: 1 ,
-					duration: 350,
-		  
-					easing:Easing.elastic()
-				  }).start();
-			}}
-			>
-				<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
-					<Feather name="shopping-cart" size={22} color="#999" style={{}} />
-				</View>
-			</TouchableNativeFeedback>
-		)
-	}else{
-		return(
-			<View style={{position:'relative'}}>
-				<TouchableNativeFeedback
-					onPress={(e)=>{
-						Animated.timing(this.state.carMarginLeft, {
-							toValue: 1 ,
-							duration: 350,
-				  
-							easing:Easing.elastic()
-						  }).start();
-					}}
-				>
-					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
-						<Feather name="shopping-cart" size={22} color="#999" style={{}} />
-					</View>
-				</TouchableNativeFeedback>
-
-				<View style={{position:'absolute', width:19, height:19, borderRadius:18, elevation:2, backgroundColor:'#f44336', padding:0, justifyContent:'center', left:15, top:-7}}>
-					<Text style={{color:'#fff', fontSize:10, alignSelf:'center'}}>12</Text>
-				</View>
-
-			</View>
-		)
-	}
-}
-
 renderOffer=offer=>{
-	let carMarginLeft = this.state.carMarginLeft.interpolate({
-		inputRange: [0, 1],
-		outputRange: [0, -410]
-	  });
-	return(
-		<Animated.View key={offer.key} style={{width:'300%', flexDirection:'row', marginLeft:carMarginLeft}}>
-			<View  style={{width:'33.3333%', flexDirection:'row', justifyContent:'space-between', paddingHorizontal:16,  paddingVertical:12, borderTopColor:'#fafafa', borderTopWidth:1}}>
-				
-				<View style={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'25%'}}>
-					{this.renderSrok(offer.srok)}	
-				
-				</View>
-				<View  style={{width:'15%', alignItems:'flex-end'}}>
-					<Text style={{marginLeft:10, fontSize:16, color:'#424242'}}>{offer.qty} шт</Text>
-				</View>
-				<View  style={{width:'25%',alignItems:'flex-end'}}>
-					<Text style={{marginLeft:10, fontSize:16, color:'#424242'}}>{offer.price} ₽</Text>
-				</View>
-				{this.renderCart(offer)}
-				
-			</View>
-			<View  style={{width:'33.3333%', flexDirection:'row', justifyContent:'space-between', paddingHorizontal:16,  paddingVertical:12, borderTopColor:'#fafafa', borderTopWidth:1}}>
-				<Text>Позиция будет добавлена в корзину</Text>
-				<TouchableNativeFeedback
-					onPress={(e)=>{
-						Animated.timing(this.state.carMarginLeft, {
-							toValue: 0 ,
-							duration: 350,
-				  
-							easing:Easing.elastic()
-						  }).start();
-					}}
-				>
-					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
-						<Feather name="check" size={22} color="blue" style={{}} />
-					</View>
-				</TouchableNativeFeedback>
-			</View>
-		</Animated.View>
+	return (
+		<OfferLine offer={offer}></OfferLine>
 	)
 }
 
@@ -502,12 +669,7 @@ renderOfferGroup = offerGroup =>{
 		<View key={offerGroup.key} style={{marginBottom:24,}}>
 			<View style={{ flexDirection:'row', justifyContent:'space-between',  paddingHorizontal:16, backgroundColor:'#fafafa', paddingVertical:8}}>
 				<Text style={{fontWeight:'bold'}}>{offerGroup.brand} {offerGroup.oem}</Text>
-				{/* <View>
-					<Feather name="camera" size={16} color="#999" style={{}} />
-				</View>
-				<View>
-					<Text style={{color:'blue', fontSize:11}}>еще предложения</Text>
-				</View> */}
+				
 			</View>
 			{Object.values(offerGroup.offers).map(item => this.renderOffer(item))}
 		</View>
