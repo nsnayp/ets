@@ -10,12 +10,16 @@ import {
 	Easing,
 	ScrollView,
 	StyleSheet,
-	Image
+	Image,Platform
 	
 } from 'react-native';
 
-import { Feather,MaterialIcons } from '@expo/vector-icons';
+import { Feather,MaterialIcons,FontAwesome } from '@expo/vector-icons';
 //import { ScrollView } from 'react-native-gesture-handler';
+
+var screenWidth = Dimensions.get('window').width;
+var screenHeight = Dimensions.get('window').height;
+
 const HEADER_MAX_HEIGHT = 250;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
@@ -25,6 +29,7 @@ export class OfferLine extends React.Component {
 		super(props)
 		this.state = { ...this.props.offer}
 		this.state.carMarginLeft=new Animated.Value(0)
+		this.state.toCartQty = 1
 	}
 
 	
@@ -74,12 +79,6 @@ renderCart=offer=>{
 				<TouchableNativeFeedback
 					onPress={(e)=>{
 						requestAnimationFrame(() => {
-						/*Animated.timing(this.state.carMarginLeft, {
-							toValue: 1 ,
-							duration: 250,
-				  
-							easing:Easing.elastic()
-						  }).start();*/
 						  this.setState({cartQty:0, inCart:false})
 						})
 					}}
@@ -97,6 +96,8 @@ renderCart=offer=>{
 		)
 	}
 }
+
+
 
 render=()=>{
 	let carMarginLeft = this.state.carMarginLeft.interpolate({
@@ -125,8 +126,28 @@ render=()=>{
 				
 			</View>
 			<View  style={{width:'33.3333%', flexDirection:'row', justifyContent:'space-between', paddingHorizontal:16,  paddingVertical:12, borderTopColor:'#fafafa', borderTopWidth:1}}>
-				<Text>Позиция будет добавлена в корзину</Text>
+				<View style={{flexDirection:'row', alignContent:'flex-start'}}>
 
+					<TouchableNativeFeedback
+					onPress={(e)=>{ this.setState({toCartQty:this.state.toCartQty-1}) }}
+					>
+						<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
+							<FontAwesome name="minus" size={22} color="#666" style={{}} />
+						</View>
+					</TouchableNativeFeedback>
+
+					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
+						<Text>{this.state.toCartQty}</Text>
+					</View>
+					<TouchableNativeFeedback
+					onPress={(e)=>{ this.setState({toCartQty:this.state.toCartQty+1}) }}
+					>
+						<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
+							<FontAwesome name="plus" size={22} color="#666" style={{}} />
+						</View>
+					</TouchableNativeFeedback>
+				</View>
+				<View style={{flexDirection:'row', alignContent:'flex-end'}}>
 				<TouchableNativeFeedback
 					onPress={(e)=>{
 						Animated.timing(this.state.carMarginLeft, {
@@ -138,7 +159,7 @@ render=()=>{
 						  
 					}}
 				>
-					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
+					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
 						<MaterialIcons name="close" size={22} color="#f44336" style={{}} />
 					</View>
 				</TouchableNativeFeedback>
@@ -150,14 +171,14 @@ render=()=>{
 				  
 							easing:Easing.elastic()
 						  }).start();
-						  this.setState({cartQty:1, inCart:true})
+						  this.setState({cartQty:this.state.toCartQty, inCart:true})
 					}}
 				>
 					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
 						<Feather name="check" size={22} color="#4CAF50" style={{}} />
 					</View>
 				</TouchableNativeFeedback>
-
+				</View>
 				
 
 			</View>
@@ -702,27 +723,53 @@ renderRealese= release =>{/*
 	)*/
 }
 
-
+renderImages=()=>{
+	return(
+		<View style={{flexDirection:'row'}}>
+			<View style={{padding:16}}>
+				<Image source={{uri:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}} style={{width:80, height:80}}></Image>
+			</View>
+			<View style={{padding:16}}>
+				<Image source={{uri:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}} style={{width:80, height:80}}></Image>
+			</View>
+		</View>
+	)
+}
 
 render() {
 	
-	const headerHeight = this.state.scrollY.interpolate({
+	const scrollY = Animated.add(
+		this.state.scrollY,
+		Platform.OS === 'ios' ? HEADER_MAX_HEIGHT : 0,
+	  );
+	  const headerTranslate = scrollY.interpolate({
 		inputRange: [0, HEADER_SCROLL_DISTANCE],
-		outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+		outputRange: [0, -HEADER_SCROLL_DISTANCE],
 		extrapolate: 'clamp',
-	});
-
-	const headerHeight1 = this.state.scrollY.interpolate({
+	  });
+  
+	  const imageOpacity = scrollY.interpolate({
+		inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+		outputRange: [1, 1, 0],
+		extrapolate: 'clamp',
+	  });
+	  const imageTranslate = scrollY.interpolate({
 		inputRange: [0, HEADER_SCROLL_DISTANCE],
-		outputRange: [0, -70],
+		outputRange: [0, 100],
 		extrapolate: 'clamp',
-	});
-
-	const headerHeight2 = this.state.scrollY.interpolate({
-		inputRange: [0, HEADER_SCROLL_DISTANCE],
-		outputRange: [30, 16],
+	  });
+	  
+  
+	  const titleScale = scrollY.interpolate({
+		inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+		outputRange: [1, 1, 0.8],
 		extrapolate: 'clamp',
-	});
+	  });
+	  const titleTranslate = scrollY.interpolate({
+		inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+		outputRange: [0, 0, -8],
+		extrapolate: 'clamp',
+	  });
 
 	return (
 
@@ -733,31 +780,38 @@ render() {
 				<View>
 					<Animated.ScrollView 
 					showsVerticalScrollIndicator={false}
-					scrollEventThrottle={16}
+					scrollEventThrottle={1}
 					
-
-					onScroll={(e)=>{
+					contentInset={{
+						top: HEADER_MAX_HEIGHT,
+					  }}
+					  contentOffset={{
+						y: -HEADER_MAX_HEIGHT,
+					  }}
+					onScroll={
 							//e.nativeEvent.contentOffset.y -=10 
 
 							Animated.event(
-								[{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
-							)(e)
+								[{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
+								{ useNativeDriver: true },
+							)
 
 	
-					}}
+					}
 					>
 						<View style={styles.scrollViewContent}>
+						{this.renderImages()}
 						{Object.values(this.state.offers).map(item => this.renderOfferGroup(item))}
 						{/*Object.values(this.state.releases).map(item => this.renderRealese(item))*/}
 						</View>
 					</Animated.ScrollView>
 
 
-					<Animated.View style={[styles.header, {height: headerHeight,elevation:5}]}>
+					<Animated.View style={[styles.header, {transform: [{ translateY: headerTranslate }], elevation:5}]}>
 						<View style={{position:'relative', height:'100%'}}>
-							<Animated.Image source={{uri:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}} style={{ height:250, marginTop:headerHeight1}} ></Animated.Image>
+							<Animated.Image source={{uri:'http://etsgroup.ru/assets/img/ets.jpg'}} style={{ height:250, opacity: imageOpacity, transform: [{ translateY: imageTranslate }]}} ></Animated.Image>
 							<Image source={{uri:'http://www.bigbangthinking.com/wp-content/uploads/revslider/home-dark/gradient.png'}} style={{width:'100%', height:250, position:'absolute', top:0}}></Image>
-							<Animated.View style={{ position:'absolute', width:'100%', top:0, height:'100%', backgroundColor:'#2196f369', zIndex:10, paddingVertical:headerHeight2, paddingHorizontal:16}}>
+							<Animated.View style={{ position:'absolute', width:'100%', top:0, height:'100%', backgroundColor:'transparent', zIndex:10,  paddingHorizontal:16}}>
 							
 								<Animated.Text style={{color:'#fff', fontWeight:'bold' , fontSize:18}}>ZF 1315202037</Animated.Text>
 								<Animated.Text style={{color:'#fff',  fontSize:16, marginTop:20}}>{`Вал первичный\nс натяжителем чего-то там`}</Animated.Text>
