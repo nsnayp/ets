@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 
 import { Feather,MaterialIcons,FontAwesome } from '@expo/vector-icons';
+import ImgFullscreen from './ImgFullscreen';
 //import { ScrollView } from 'react-native-gesture-handler';
 
 var screenWidth = Dimensions.get('window').width;
@@ -38,7 +39,7 @@ renderSrok=srok=>{
 		return(
 			<View style={{flexDirection:'row',alignItems:'center'}}>
 				<View style={{backgroundColor:'#4CAF50', width:16,borderRadius:2, height:16,borderColor:'#4CAF50'}}></View>
-				<Text style={{marginLeft:10, fontSize:14, color:'green'}}>В наличии</Text>
+				<Text style={{marginLeft:10, fontSize:14, color:'green'}}>Склад</Text>
 			</View>
 			
 		)
@@ -68,7 +69,7 @@ renderCart=offer=>{
 				})
 			}}
 			>
-				<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
+				<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8,borderRadius:2, backgroundColor:'#fff'}}>
 					<Feather name="shopping-cart" size={22} color="#999" style={{}} />
 				</View>
 			</TouchableNativeFeedback>
@@ -88,12 +89,12 @@ renderCart=offer=>{
 						})
 					}}
 				>
-					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
+					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, borderRadius:2, backgroundColor:'#fff'}}>
 						<Feather name="shopping-cart" size={22} color="#999" style={{}} />
 					</View>
 				</TouchableNativeFeedback>
 
-				<View style={{position:'absolute', width:19, height:19, borderRadius:18, elevation:2, backgroundColor:'#f44336', padding:0, justifyContent:'center', left:15, top:-7}}>
+				<View style={{position:'absolute', width:19, height:19, borderRadius:18, elevation:2, backgroundColor:'#f44336', padding:0, justifyContent:'center', left:23, top:-2}}>
 					<Text style={{color:'#fff', fontSize:10, alignSelf:'center'}}>{this.state.cartQty}</Text>
 				</View>
 
@@ -111,14 +112,14 @@ render=()=>{
 	  });
 	  const offer = this.state;
 	return(
-		<Animated.View key={offer.key} style={{width:'300%', flexDirection:'row', marginLeft:carMarginLeft}}>
-			<View  style={{width:'33.3333%', flexDirection:'row', justifyContent:'space-between', paddingHorizontal:16,  paddingVertical:12, borderTopColor:'#fafafa', borderTopWidth:1}}>
+		<Animated.View key={offer.key} style={{width:'300%', flexDirection:'row', marginLeft:carMarginLeft,}}>
+			<View  style={{width:'33.3333%', flexDirection:'row', justifyContent:'space-between', paddingLeft:16, paddingRight:8,  paddingVertical:4, borderTopColor:'#fafafa', borderTopWidth:1}}>
 				
-				<View style={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'25%'}}>
+				<View style={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'20%'}}>
 					{this.renderSrok(offer.srok)}	
 				
 				</View>
-				<View  style={{width:'15%', alignItems:'flex-end', alignContent:'center', justifyContent:'center'}}>
+				<View  style={{width:'20%', alignItems:'flex-end', alignContent:'center', justifyContent:'center'}}>
 					<Text style={{marginLeft:10, fontSize:14, color:'#424242'}}>{offer.qty} шт</Text>
 				</View>
 
@@ -133,68 +134,70 @@ render=()=>{
 				<View  style={{width:'20%',alignItems:'center',  justifyContent:'center', alignContent:'center'}}>
 					<Text style={{marginLeft:10, fontSize:14, color:'#424242'}}>{offer.price} ₽</Text>
 				</View>
-				<View>
-					<View  style={{ alignItems:'flex-end'}}>
+				<View style={{width:'25%', flexDirection:'row'}}>
+					<View  style={{ alignItems:'flex-end', width:'50%', justifyContent:'center'}}>
 						<Feather name="info" size={22} color="#999" style={{}} />
 					</View>
-					{this.renderCart(offer)}
+					<View  style={{ alignItems:'flex-end', width:'50%', justifyContent:'center'}}>
+						{this.renderCart(offer)}
+					</View>
 				</View>
 				
 			</View>
-			<View  style={{width:'33.3333%', flexDirection:'row', justifyContent:'space-between', paddingHorizontal:16,  paddingVertical:12, borderTopColor:'#fafafa', borderTopWidth:1}}>
+			<View  style={{width:'33.3333%', flexDirection:'row', justifyContent:'space-between', paddingLeft:16, paddingRight:8,   paddingVertical:0,  borderTopColor:'#fafafa', borderTopWidth:1}}>
 				<View style={{flexDirection:'row', alignContent:'flex-start'}}>
 
 					<TouchableNativeFeedback
 					onPress={(e)=>{ this.setState({toCartQty:this.state.toCartQty-1}) }}
 					>
-						<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
+						<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8,  marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
 							<FontAwesome name="minus" size={22} color="#999" style={{}} />
 						</View>
 					</TouchableNativeFeedback>
 
-					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
-						<Text>{this.state.toCartQty}</Text>
+					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8,  marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
+						<Text>{this.state.toCartQty} шт</Text>
 					</View>
 					<TouchableNativeFeedback
 					onPress={(e)=>{ this.setState({toCartQty:this.state.toCartQty+1}) }}
 					>
-						<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
+						<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8,  marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
 							<FontAwesome name="plus" size={22} color="#999" style={{}} />
 						</View>
 					</TouchableNativeFeedback>
 				</View>
-				<View style={{flexDirection:'row', alignContent:'flex-end'}}>
-				<TouchableNativeFeedback
-					onPress={(e)=>{
-						Animated.timing(this.state.carMarginLeft, {
-							toValue: 0 ,
-							duration: 250,
-				  
-							easing:Easing.elastic()
-						  }).start();
-						  this.setState({cartQty:null, inCart:false, toCartQty:1})
-						  
-					}}
-				>
-					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
-						<MaterialIcons name="close" size={22} color="#f44336" style={{}} />
-					</View>
-				</TouchableNativeFeedback>
-				<TouchableNativeFeedback
-					onPress={(e)=>{
-						Animated.timing(this.state.carMarginLeft, {
-							toValue: 0 ,
-							duration: 250,
-				  
-							easing:Easing.elastic()
-						  }).start();
-						  this.setState({cartQty:this.state.toCartQty, inCart:true})
-					}}
-				>
-					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, borderRadius:2, backgroundColor:'#fff'}}>
-						<Feather name="check" size={22} color="#4CAF50" style={{}} />
-					</View>
-				</TouchableNativeFeedback>
+				<View style={{flexDirection:'row', alignContent:'flex-end', justifyContent:'center', width:'20%'}}>
+					<TouchableNativeFeedback
+						onPress={(e)=>{
+							Animated.timing(this.state.carMarginLeft, {
+								toValue: 0 ,
+								duration: 250,
+					
+								easing:Easing.elastic()
+							}).start();
+							this.setState({cartQty:null, inCart:false, toCartQty:1})
+							
+						}}
+					>
+						<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8,  borderRadius:2, backgroundColor:'#fff'}}>
+							<MaterialIcons name="close" size={22} color="#f44336" style={{}} />
+						</View>
+					</TouchableNativeFeedback>
+					<TouchableNativeFeedback
+						onPress={(e)=>{
+							Animated.timing(this.state.carMarginLeft, {
+								toValue: 0 ,
+								duration: 250,
+					
+								easing:Easing.elastic()
+							}).start();
+							this.setState({cartQty:this.state.toCartQty, inCart:true})
+						}}
+					>
+						<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8,  borderRadius:2, backgroundColor:'#fff'}}>
+							<Feather name="check" size={22} color="#4CAF50" style={{}} />
+						</View>
+					</TouchableNativeFeedback>
 				</View>
 				
 
@@ -745,13 +748,19 @@ renderRealese= release =>{/*
 
 renderImages=()=>{
 	return(
-		<View style={{flexDirection:'row'}}>
-			<View style={{padding:16}}>
-				<Image source={{uri:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}} style={{width:80, height:80}}></Image>
-			</View>
-			<View style={{padding:16}}>
-				<Image source={{uri:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}} style={{width:80, height:80}}></Image>
-			</View>
+		<View style={{flexDirection:'row',  padding:16}}>
+			<ImgFullscreen images={[{src:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}]}>
+				<View style={{marginRight:8, borderRadius:4, overflow:'hidden'}}>
+					<Image source={{uri:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}} style={{width:80, height:80}}></Image>
+					<View style={{flex:1, backgroundColor:'#0000007a', position:'absolute', top:0, left:0, right:0, bottom:0}}></View>
+				</View>
+			</ImgFullscreen >
+			<ImgFullscreen images={[{src:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}]}>
+				<View style={{marginRight:8, borderRadius:4, overflow:'hidden'}}>
+					<Image source={{uri:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}} style={{width:80, height:80}}></Image>
+					<View style={{flex:1, backgroundColor:'#0000007a', position:'absolute', top:0, left:0, right:0, bottom:0}}></View>
+				</View>
+			</ImgFullscreen>
 		</View>
 	)
 }
@@ -795,7 +804,7 @@ render() {
 
 		
 
-		<View style={{flex:1, backgroundColor:'#fff', paddingTop:24}}>
+		<View style={{flex:1, backgroundColor:'#fff'}}>
 
 				<View>
 					<Animated.ScrollView 
@@ -803,10 +812,10 @@ render() {
 					scrollEventThrottle={1}
 					
 					contentInset={{
-						top: HEADER_MAX_HEIGHT,
+						top: 0// HEADER_MAX_HEIGHT,
 					  }}
 					  contentOffset={{
-						y: -HEADER_MAX_HEIGHT,
+						y:  0 //-HEADER_MAX_HEIGHT,
 					  }}
 					onScroll={
 							//e.nativeEvent.contentOffset.y -=10 
@@ -827,7 +836,7 @@ render() {
 					</Animated.ScrollView>
 
 
-					<Animated.View style={[styles.header, {transform: [{ translateY: headerTranslate }], elevation:5}]}>
+					{/* <Animated.View style={[styles.header, {transform: [{ translateY: headerTranslate }], elevation:5}]}>
 						<View style={{position:'relative', height:'100%'}}>
 							<Animated.Image source={{uri:'http://etsgroup.ru/assets/img/ets.jpg'}} style={{ height:250, opacity: imageOpacity, transform: [{ translateY: imageTranslate }]}} ></Animated.Image>
 							<Image source={{uri:'http://www.bigbangthinking.com/wp-content/uploads/revslider/home-dark/gradient.png'}} style={{width:'100%', height:250, position:'absolute', top:0}}></Image>
@@ -840,7 +849,7 @@ render() {
 							<Feather name="menu" size={28} color="#fff" style={{}} />
 							</Animated.View>
 						</View>
-  					</Animated.View>
+  					</Animated.View> */}
 
 				</View>
 			
@@ -852,8 +861,8 @@ render() {
 
 const styles = StyleSheet.create({
 	scrollViewContent: {
-		marginTop: HEADER_MAX_HEIGHT,
-		minHeight:600
+		//marginTop: HEADER_MAX_HEIGHT,
+		//minHeight:600
 	},
 	header: {
 		position: 'absolute',
