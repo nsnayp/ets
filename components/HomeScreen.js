@@ -79,7 +79,12 @@ renderCart=offer=>{
 				<TouchableNativeFeedback
 					onPress={(e)=>{
 						requestAnimationFrame(() => {
-						  this.setState({cartQty:0, inCart:false})
+							Animated.timing(this.state.carMarginLeft, {
+								toValue: 1 ,
+								duration: 250,
+					  
+								easing:Easing.elastic()
+							  }).start();
 						})
 					}}
 				>
@@ -132,7 +137,7 @@ render=()=>{
 					onPress={(e)=>{ this.setState({toCartQty:this.state.toCartQty-1}) }}
 					>
 						<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
-							<FontAwesome name="minus" size={22} color="#666" style={{}} />
+							<FontAwesome name="minus" size={22} color="#999" style={{}} />
 						</View>
 					</TouchableNativeFeedback>
 
@@ -143,7 +148,7 @@ render=()=>{
 					onPress={(e)=>{ this.setState({toCartQty:this.state.toCartQty+1}) }}
 					>
 						<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, margin:-8, marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
-							<FontAwesome name="plus" size={22} color="#666" style={{}} />
+							<FontAwesome name="plus" size={22} color="#999" style={{}} />
 						</View>
 					</TouchableNativeFeedback>
 				</View>
@@ -156,6 +161,7 @@ render=()=>{
 				  
 							easing:Easing.elastic()
 						  }).start();
+						  this.setState({cartQty:null, inCart:false, toCartQty:1})
 						  
 					}}
 				>
