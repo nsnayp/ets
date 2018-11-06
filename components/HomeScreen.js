@@ -118,16 +118,27 @@ render=()=>{
 					{this.renderSrok(offer.srok)}	
 				
 				</View>
-				<View  style={{width:'15%', alignItems:'flex-end'}}>
+				<View  style={{width:'15%', alignItems:'flex-end', alignContent:'center', justifyContent:'center'}}>
 					<Text style={{marginLeft:10, fontSize:14, color:'#424242'}}>{offer.qty} шт</Text>
 				</View>
-				<View  style={{width:'25%',alignItems:'flex-end'}}>
+
+				<View  style={{width:'15%', alignItems:'center', justifyContent:'center', alignContent:'center', flexDirection:'row'}}>
+					<View style={{width:5, height:14, marginRight:0, backgroundColor:'#4CAF50'}}></View>
+					<View style={{width:5, height:14, marginRight:0, backgroundColor:'#4CAF50'}}></View>
+					<View style={{width:5, height:14, marginRight:0, backgroundColor:'#4CAF50'}}></View>
+					<View style={{width:5, height:14, marginRight:0, backgroundColor:'#4CAF50'}}></View>
+					<View style={{width:5, height:14,  marginRight:0, backgroundColor:'#eee'}}></View>
+				</View>
+
+				<View  style={{width:'20%',alignItems:'center',  justifyContent:'center', alignContent:'center'}}>
 					<Text style={{marginLeft:10, fontSize:14, color:'#424242'}}>{offer.price} ₽</Text>
 				</View>
-				<View  style={{alignItems:'flex-end'}}>
-				<Feather name="info" size={22} color="#999" style={{}} />
+				<View>
+					<View  style={{ alignItems:'flex-end'}}>
+						<Feather name="info" size={22} color="#999" style={{}} />
+					</View>
+					{this.renderCart(offer)}
 				</View>
-				{this.renderCart(offer)}
 				
 			</View>
 			<View  style={{width:'33.3333%', flexDirection:'row', justifyContent:'space-between', paddingHorizontal:16,  paddingVertical:12, borderTopColor:'#fafafa', borderTopWidth:1}}>
@@ -699,6 +710,9 @@ renderOfferGroup = offerGroup =>{
 				
 			</View>
 			{Object.values(offerGroup.offers).map(item => this.renderOffer(item))}
+			<View style={{ flexDirection:'row', justifyContent:'flex-end',  paddingHorizontal:16,  paddingVertical:8}}>
+				<Text style={{fontSize:13, color:'#86adde'}}>еще 5 предложений</Text>
+			</View>
 		</View>
 	)
 }
