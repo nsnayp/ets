@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
 	Text,
 	View,
-	TouchableNativeFeedback,
+	TouchableOpacity,
 	ActivityIndicator,
 	PanResponder,
 	Animated,
@@ -57,7 +57,7 @@ renderSrok=srok=>{
 renderCart=offer=>{
 	if(offer.inCart===false){
 		return(
-			<TouchableNativeFeedback
+			<TouchableOpacity
 			onPress={(e)=>{
 				requestAnimationFrame(() => {
 				Animated.timing(this.state.carMarginLeft, {
@@ -73,12 +73,12 @@ renderCart=offer=>{
 				<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8,borderRadius:2, backgroundColor:'#fff'}}>
 					<Feather name="shopping-cart" size={22} color="#999" style={{}} />
 				</View>
-			</TouchableNativeFeedback>
+			</TouchableOpacity>
 		)
 	}else{
 		return(
 			<View style={{position:'relative'}}>
-				<TouchableNativeFeedback
+				<TouchableOpacity
 					onPress={(e)=>{
 						requestAnimationFrame(() => {
 							Animated.timing(this.state.carMarginLeft, {
@@ -93,7 +93,7 @@ renderCart=offer=>{
 					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8, borderRadius:2, backgroundColor:'#fff'}}>
 						<Feather name="shopping-cart" size={22} color="#999" style={{}} />
 					</View>
-				</TouchableNativeFeedback>
+				</TouchableOpacity>
 
 				<View style={{position:'absolute', width:19, height:19, borderRadius:18, elevation:2, backgroundColor:'#f44336', padding:0, justifyContent:'center', left:23, top:-2}}>
 					<Text style={{color:'#fff', fontSize:10, alignSelf:'center'}}>{this.state.cartQty}</Text>
@@ -149,27 +149,27 @@ render=()=>{
 			<View  style={{width:'33.3333%', flexDirection:'row', justifyContent:'space-between', paddingLeft:16, paddingRight:8,   paddingVertical:0,  borderTopColor:'#fafafa', borderTopWidth:1}}>
 				<View style={{flexDirection:'row', alignContent:'flex-start'}}>
 
-					<TouchableNativeFeedback
+					<TouchableOpacity
 					onPress={(e)=>{ this.setState({toCartQty:this.state.toCartQty-1}) }}
 					>
 						<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8,  marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
 							<FontAwesome name="minus" size={22} color="#999" style={{}} />
 						</View>
-					</TouchableNativeFeedback>
+					</TouchableOpacity>
 
 					<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8,  marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
 						<Text>{this.state.toCartQty} шт</Text>
 					</View>
-					<TouchableNativeFeedback
+					<TouchableOpacity
 					onPress={(e)=>{ this.setState({toCartQty:this.state.toCartQty+1}) }}
 					>
 						<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8,  marginRight:14, borderRadius:2, backgroundColor:'#fff'}}>
 							<FontAwesome name="plus" size={22} color="#999" style={{}} />
 						</View>
-					</TouchableNativeFeedback>
+					</TouchableOpacity>
 				</View>
 				<View style={{flexDirection:'row', alignContent:'flex-end', justifyContent:'center', width:'20%'}}>
-					<TouchableNativeFeedback
+					<TouchableOpacity
 						onPress={(e)=>{
 							Animated.timing(this.state.carMarginLeft, {
 								toValue: 0 ,
@@ -184,8 +184,8 @@ render=()=>{
 						<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8,  borderRadius:2, backgroundColor:'#fff'}}>
 							<MaterialIcons name="close" size={22} color="#f44336" style={{}} />
 						</View>
-					</TouchableNativeFeedback>
-					<TouchableNativeFeedback
+					</TouchableOpacity>
+					<TouchableOpacity
 						onPress={(e)=>{
 							Animated.timing(this.state.carMarginLeft, {
 								toValue: 0 ,
@@ -199,7 +199,7 @@ render=()=>{
 						<View style={{paddingVertical:8, paddingRight:10,paddingLeft:8,  borderRadius:2, backgroundColor:'#fff'}}>
 							<Feather name="check" size={22} color="#4CAF50" style={{}} />
 						</View>
-					</TouchableNativeFeedback>
+					</TouchableOpacity>
 				</View>
 				
 
@@ -663,6 +663,7 @@ findOem=()=>{
 		.then((responseJson) => {
 			var data = JSON.parse(base64.decode(responseJson))
 			var newdata = {}
+			var images = data.product.img.img
 			for(k in data.offers){
 				var item = data.offers[k]
 
@@ -683,8 +684,8 @@ findOem=()=>{
 			for(k in newdata){
 				newdata1.push(newdata[k])
 			}
-			console.log(newdata1)
-			this.setState({offers:newdata1})			
+			console.log(data)
+			this.setState({offers:newdata1, images:images})			
 		})
 		.catch((error) => {
 			console.error(error);
@@ -789,7 +790,7 @@ renderRealese= release =>{/*
 		
 		<View key={release.key} style={[ {borderBottomColor:'#eee', borderBottomWidth:1}]}>
 			
-			<TouchableNativeFeedback
+			<TouchableOpacity
 			onPress={()=>{this._onPress(release)}}>
 				<View style={{width:'100%', flexDirection:'row', justifyContent:'space-between',padding:16}}>
 					<View style={{}}>
@@ -803,32 +804,27 @@ renderRealese= release =>{/*
 					</View> 
 				</View>
 				
-			</TouchableNativeFeedback>
+			</TouchableOpacity>
 			
 		</View>
 		
 		
 	)*/
 }
-
-renderImages=()=>{
+renderImage=image=>{
+	var src = 'http://etsgroup.ru/assets/product/1000/'+image
 	return(
-		/*<View style={{flexDirection:'row',  padding:16}}>
-			<ImgFullscreen images={[{src:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}]}>
-				<View style={{marginRight:8, borderRadius:4, overflow:'hidden'}}>
-					<Image source={{uri:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}} style={{width:80, height:80}}></Image>
-					<View style={{flex:1, backgroundColor:'#0000007a', position:'absolute', top:0, left:0, right:0, bottom:0}}></View>
-				</View>
-			</ImgFullscreen >
-			<ImgFullscreen images={[{src:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}]}>
-				<View style={{marginRight:8, borderRadius:4, overflow:'hidden'}}>
-					<Image source={{uri:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}} style={{width:80, height:80}}></Image>
-					<View style={{flex:1, backgroundColor:'#0000007a', position:'absolute', top:0, left:0, right:0, bottom:0}}></View>
-				</View>
-			</ImgFullscreen>
-		</View>*/
-		null
+		<ImgFullscreen key={image} images={[{src:src}]}>
+			<View style={{marginRight:8, borderRadius:4, overflow:'hidden'}}>
+				<Image source={{uri:src}} style={{width:80, height:80}}></Image>
+				<View style={{flex:1, backgroundColor:'#0000007a', position:'absolute', top:0, left:0, right:0, bottom:0}}></View>
+			</View>
+		</ImgFullscreen >
 	)
+}
+renderImages=()=>{
+	return (this.state.images)? Object.values(this.state.images).map(item => this.renderImage(item[0])) : null 
+
 }
 
 render() {
@@ -895,7 +891,9 @@ render() {
 					}
 					>
 						<View style={styles.scrollViewContent}>
-						{this.renderImages()}
+						<ScrollView horizontal={true} style={{paddingVertical:16, paddingHorizontal:8, flexDirection:'row'}}>
+							{this.renderImages()}
+						</ScrollView>
 						{ (this.state.offers)? Object.values(this.state.offers).map(item => this.renderOfferGroup(item)) : null }
 						{/*Object.values(this.state.releases).map(item => this.renderRealese(item))*/}
 						</View>

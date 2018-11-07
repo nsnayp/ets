@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View , TouchableNativeFeedback, Dimensions, TextInput, Animated,Easing, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import { Text, View , TouchableOpacity, Dimensions, TextInput, Animated,Easing, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import BottomMenu from '../components/BottomMenu';
 import {HomeScreen} from '../components/HomeScreen';
 import {AssetExample} from '../components/AssetExample';
@@ -138,7 +138,7 @@ export default class AppAuth extends React.Component {
 								<Animated.View style={{width:widthSP,position:'relative',opacity:opacitySP}}>
 									<TextInput returnKeyType="search" multiline={false}  onSubmitEditing={(event) => this.findOem( event.nativeEvent.text )} ref={el => { this.searchPanel = el; }} underlineColorAndroid='rgba(0,0,0,0)' placeholder='Поиск по номеру' style={{width:'100%', backgroundColor:'#fff', fontSize:15, paddingVertical:6, borderBottomWidth:0, borderRadius:4, borderWidth:0, paddingHorizontal:16, paddingLeft:40}}></TextInput>
 									<View style={{position:'absolute', left:0}}>
-										<TouchableNativeFeedback onPress={() =>
+										<TouchableOpacity onPress={() =>
 											requestAnimationFrame(()=>{
 												this.hideSearchPanel()
 											}
@@ -148,7 +148,7 @@ export default class AppAuth extends React.Component {
 										<View style={{ padding: 10, flexDirection: 'column', alignItems: 'center' }}>
 											<Feather name="arrow-left" size={20} color="#999" style={{}} />
 										</View>
-										</TouchableNativeFeedback>
+										</TouchableOpacity>
 										
 
 									</View>
@@ -157,7 +157,7 @@ export default class AppAuth extends React.Component {
 
 								<View style={{position:'absolute', right:0, zIndex:10}}>
 									<View>
-										<TouchableWithoutFeedback onPress={() =>
+										<TouchableOpacity onPress={() =>
 										
 											this.openSearchPanel()
 										
@@ -165,7 +165,7 @@ export default class AppAuth extends React.Component {
 											<View style={{ padding: 10, flexDirection: 'column', alignItems: 'center' }}>
 												<Feather name="search" size={20} color="#fff" style={{}} />
 											</View>
-										</TouchableWithoutFeedback>
+										</TouchableOpacity>
 									</View>
 								</View>
 
@@ -176,11 +176,11 @@ export default class AppAuth extends React.Component {
 						
 						
 						<View>
-							<TouchableNativeFeedback onPress={() => this.navigate('Asset')}>
+							<TouchableOpacity onPress={() => this.navigate('Asset')}>
 								<View style={{ padding: 8, flexDirection: 'column', alignItems: 'center' }}>
 									<Feather name="shopping-cart" size={20} color="#fff" style={{}} />
 								</View>
-							</TouchableNativeFeedback>
+							</TouchableOpacity>
 						</View>
 					</View>
 

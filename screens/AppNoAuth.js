@@ -7,7 +7,7 @@ import {
 	Vibration,
 	TouchableOpacity,
 	TouchableNativeFeedback,
-	Image,
+	Image ,
 	TextInput,
 	AsyncStorage,
 	Dimensions
@@ -71,11 +71,11 @@ export default class AppNoAuth extends React.Component {
 					<TextInput onChangeText={(text)=>this.setState({password:text})} style={{paddingVertical:10, paddingHorizontal:4, fontSize:17}}></TextInput>
 				</View>
 				<View style={{justifyContent:'center', marginTop:10,paddingHorizontal:45, width:'100%'}}>
-					<TouchableNativeFeedback onPress={this.btnPressed} >
+					<TouchableOpacity onPress={this.btnPressed} >
 						<View style={{ padding: 10, flexDirection: 'column', alignItems: 'center', backgroundColor:'blue' }}>
 							<Text style={{color:'#fff'}}>Авторизоваться</Text>
 						</View>
-					</TouchableNativeFeedback>
+					</TouchableOpacity>
 				</View>
                                                         </View>                                                       
                             )
