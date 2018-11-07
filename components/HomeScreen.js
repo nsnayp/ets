@@ -13,7 +13,7 @@ import {
 	Image,Platform
 	
 } from 'react-native';
-
+import base64 from 'react-native-base64';
 import { Feather,MaterialIcons,FontAwesome } from '@expo/vector-icons';
 import ImgFullscreen from './ImgFullscreen';
 //import { ScrollView } from 'react-native-gesture-handler';
@@ -31,6 +31,7 @@ export class OfferLine extends React.Component {
 		this.state = { ...this.props.offer}
 		this.state.carMarginLeft=new Animated.Value(0)
 		this.state.toCartQty = 1
+		
 	}
 
 	
@@ -111,8 +112,9 @@ render=()=>{
 		outputRange: [0, -410]
 	  });
 	  const offer = this.state;
+	if(offer.visible){
 	return(
-		<Animated.View key={offer.key} style={{width:'300%', flexDirection:'row', marginLeft:carMarginLeft,}}>
+		<Animated.View key={offer.id} style={{width:'300%', flexDirection:'row', marginLeft:carMarginLeft,}}>
 			<View  style={{width:'33.3333%', flexDirection:'row', justifyContent:'space-between', paddingLeft:16, paddingRight:8,  paddingVertical:4, borderTopColor:'#fafafa', borderTopWidth:1}}>
 				
 				<View style={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'20%'}}>
@@ -204,6 +206,9 @@ render=()=>{
 			</View>
 		</Animated.View>
 	)
+	}else{
+		return null
+	}
 }
 }
 
@@ -216,7 +221,7 @@ constructor(props) {
 		scrollY: new Animated.Value(0),
 		fxlock:false,
 		pan: new Animated.ValueXY(),
-		offers: [
+/* 		offers: [
 			
 			{
 				oem:'95535642',
@@ -397,6 +402,8 @@ constructor(props) {
 					
 			
 		],
+		 */
+		
 		releases: [
 			{
 				key: 1,
@@ -625,9 +632,64 @@ constructor(props) {
 			},
 		],
 	};
+
+	
+	
 }
 translateY = new Animated.Value(0);
 offsetTop = 0;
+
+componentDidUpdate(prevProps){
+
+	var params = this.props.navigation.state.params;
+	var search = (params)?params.search:null;
+
+	var paramsPREV = prevProps.navigation.state.params;
+	var searchPREV = (paramsPREV)?paramsPREV.search:null;
+	
+	if (search !== searchPREV) {
+		this.state.search = search
+		this.findOem()
+	}
+	/*
+	if(this.state.search){
+		
+	}*/
+}
+
+findOem=()=>{
+	fetch('http:/etsgroup.ru/offer/api/ZF/'+this.state.search)
+		.then((response) => response.text())
+		.then((responseJson) => {
+			var data = JSON.parse(base64.decode(responseJson))
+			var newdata = {}
+			for(k in data.offers){
+				var item = data.offers[k]
+
+				item.inCart = false;
+				item.toCartQty=1;
+				item.qty=item.rest;
+				item.visible = (item.visible)?true:false;
+				
+
+				var key = item.brand+item.oem
+				if(!newdata[key]){newdata[key]={}; newdata[key].offers=[] }
+				newdata[key].hidden_offer_count = item.hidden_offer_count;
+				newdata[key].oem = item.oem;
+				newdata[key].brand = item.brand; 
+				newdata[key].offers.push(item)
+			}
+			var newdata1 = []
+			for(k in newdata){
+				newdata1.push(newdata[k])
+			}
+			console.log(newdata1)
+			this.setState({offers:newdata1})			
+		})
+		.catch((error) => {
+			console.error(error);
+		});
+}
 
 getDirection = ({ moveX, moveY, dx, dy}) => {
 	const draggedDown = dy > 20;
@@ -701,21 +763,24 @@ _onPress = (release) =>{
 
 renderOffer=offer=>{
 	return (
-		<OfferLine offer={offer}></OfferLine>
+		<OfferLine key={offer.id} offer={offer}></OfferLine>
 	)
 }
 
 renderOfferGroup = offerGroup =>{
 	return(
-		<View key={offerGroup.key} style={{marginBottom:24,}}>
-			<View style={{ flexDirection:'row', justifyContent:'space-between',  paddingHorizontal:16, backgroundColor:'#fafafa', paddingVertical:8}}>
-				<Text style={{fontWeight:'bold'}}>{offerGroup.brand} {offerGroup.oem}</Text>
+		<View key={offerGroup.oem} style={{  position:'relative', zIndex:5, marginBottom:24, backgroundColor:'#fff'}}>
+			<View style={{ flexDirection:'row', justifyContent:'space-between',  paddingHorizontal:16,  backgroundColor:'#fafafa', paddingVertical:8}}>
+				<Text style={{color:'#666', fontWeight:'800'}}>{offerGroup.brand} {offerGroup.oem}</Text>
 				
 			</View>
-			{Object.values(offerGroup.offers).map(item => this.renderOffer(item))}
-			<View style={{ flexDirection:'row', justifyContent:'flex-end',  paddingHorizontal:16,  paddingVertical:8}}>
-				<Text style={{fontSize:13, color:'#86adde'}}>еще 5 предложений</Text>
-			</View>
+			{ Object.values(offerGroup.offers).map(item => this.renderOffer(item))}
+			
+			{
+				(offerGroup.hidden_offer_count>0)?<View style={{ flexDirection:'row', justifyContent:'flex-end',  paddingHorizontal:16,  paddingVertical:8}}><Text style={{fontSize:13, color:'#86adde'}}>еще {offerGroup.hidden_offer_count} предложений</Text></View>:null
+			}
+				
+			
 		</View>
 	)
 }
@@ -748,7 +813,7 @@ renderRealese= release =>{/*
 
 renderImages=()=>{
 	return(
-		<View style={{flexDirection:'row',  padding:16}}>
+		/*<View style={{flexDirection:'row',  padding:16}}>
 			<ImgFullscreen images={[{src:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}]}>
 				<View style={{marginRight:8, borderRadius:4, overflow:'hidden'}}>
 					<Image source={{uri:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}} style={{width:80, height:80}}></Image>
@@ -761,7 +826,8 @@ renderImages=()=>{
 					<View style={{flex:1, backgroundColor:'#0000007a', position:'absolute', top:0, left:0, right:0, bottom:0}}></View>
 				</View>
 			</ImgFullscreen>
-		</View>
+		</View>*/
+		null
 	)
 }
 
@@ -830,7 +896,7 @@ render() {
 					>
 						<View style={styles.scrollViewContent}>
 						{this.renderImages()}
-						{Object.values(this.state.offers).map(item => this.renderOfferGroup(item))}
+						{ (this.state.offers)? Object.values(this.state.offers).map(item => this.renderOfferGroup(item)) : null }
 						{/*Object.values(this.state.releases).map(item => this.renderRealese(item))*/}
 						</View>
 					</Animated.ScrollView>
@@ -861,6 +927,7 @@ render() {
 
 const styles = StyleSheet.create({
 	scrollViewContent: {
+		backgroundColor:'#fff'
 		//marginTop: HEADER_MAX_HEIGHT,
 		//minHeight:600
 	},
