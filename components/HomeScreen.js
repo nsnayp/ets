@@ -16,6 +16,7 @@ import {
 import base64 from 'react-native-base64';
 import { Feather,MaterialIcons,FontAwesome } from '@expo/vector-icons';
 import ImgFullscreen from './ImgFullscreen';
+
 //import { ScrollView } from 'react-native-gesture-handler';
 
 var screenWidth = Dimensions.get('window').width;
@@ -657,39 +658,40 @@ componentDidUpdate(prevProps){
 	}*/
 }
 
-findOem=()=>{
-	fetch('http:/etsgroup.ru/offer/api/ZF/'+this.state.search)
-		.then((response) => response.text())
-		.then((responseJson) => {
-			var data = JSON.parse(base64.decode(responseJson))
-			var newdata = {}
-			var images = data.product.img.img
-			for(k in data.offers){
-				var item = data.offers[k]
+findOem=async()=>{
 
-				item.inCart = false;
-				item.toCartQty=1;
-				item.qty=item.rest;
-				item.visible = (item.visible)?true:false;
-				
+	const response = await fetch('http:/etsgroup.ru/offer/api/ZF/'+this.state.search)
+	const responseJson = await response.text();
 
-				var key = item.brand+item.oem
-				if(!newdata[key]){newdata[key]={}; newdata[key].offers=[] }
-				newdata[key].hidden_offer_count = item.hidden_offer_count;
-				newdata[key].oem = item.oem;
-				newdata[key].brand = item.brand; 
-				newdata[key].offers.push(item)
-			}
-			var newdata1 = []
-			for(k in newdata){
-				newdata1.push(newdata[k])
-			}
-			console.log(data)
-			this.setState({offers:newdata1, images:images})			
-		})
-		.catch((error) => {
-			console.error(error);
-		});
+
+	
+
+	var data = JSON.parse(base64.decode(responseJson));
+	var newdata = {}
+	var images = data.product.img.img
+	for(k in data.offers){
+		var item = data.offers[k]
+
+		item.inCart = false;
+		item.toCartQty=1;
+		item.qty=item.rest;
+		item.visible = (item.visible)?true:false;
+		
+
+		var key = item.brand+item.oem
+		if(!newdata[key]){newdata[key]={}; newdata[key].offers=[] }
+		newdata[key].hidden_offer_count = item.hidden_offer_count;
+		newdata[key].oem = item.oem;
+		newdata[key].brand = item.brand; 
+		newdata[key].offers.push(item)
+	}
+	var newdata1 = []
+	for(k in newdata){
+		newdata1.push(newdata[k])
+	}
+	console.log(data)
+	this.setState({offers:newdata1, images:images})		
+
 }
 
 getDirection = ({ moveX, moveY, dx, dy}) => {
@@ -814,7 +816,7 @@ renderRealese= release =>{/*
 renderImage=image=>{
 	var src = 'http://etsgroup.ru/assets/product/1000/'+image
 	return(
-		<ImgFullscreen key={image} images={[{src:src}]}>
+		<ImgFullscreen key={image} images={[{src:src},{src:src},{src:src}]}>
 			<View style={{marginRight:8, borderRadius:4, overflow:'hidden'}}>
 				<Image source={{uri:src}} style={{width:80, height:80}}></Image>
 				<View style={{flex:1, backgroundColor:'#0000007a', position:'absolute', top:0, left:0, right:0, bottom:0}}></View>
@@ -891,6 +893,19 @@ render() {
 					}
 					>
 						<View style={styles.scrollViewContent}>
+
+					
+
+		<ImgFullscreen images={[{src:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'},{src:'http://etsgroup.ru/assets/product/1000/er/95535642.jpg'}]}>
+			<View style={{marginRight:8, borderRadius:4, overflow:'hidden'}}>
+				<Image source={{uri:'http://etsgroup.ru/assets/product/1000/tas/T17692.jpg'}} style={{width:80, height:80}}></Image>
+				<View style={{flex:1, backgroundColor:'#0000007a', position:'absolute', top:0, left:0, right:0, bottom:0}}></View>
+			</View>
+		</ImgFullscreen >
+	
+
+
+
 						<ScrollView horizontal={true} style={{paddingVertical:16, paddingHorizontal:8, flexDirection:'row'}}>
 							{this.renderImages()}
 						</ScrollView>
